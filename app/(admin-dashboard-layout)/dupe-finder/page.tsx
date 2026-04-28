@@ -3,6 +3,7 @@ import { useState } from "react";
 import AddDupeEntry from "@/components/dupeFinder/addDupeEntryModal";
 import AddExpensiveProduct from "@/components/dupeFinder/addExpensiveProductModal";
 import DupeEntriesTable from "@/components/dupeFinder/dupeEntriesTable";
+import DupeFoundsModal from "@/components/dupeFinder/dupeFoundsModal";
 
 interface Product {
     id: number;
@@ -57,17 +58,11 @@ const EditIcon = () => (
 );
 
 const TrashIcon = () => (
-    <svg
-        className="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-    >
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth={1.8}
-            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M8 7V5a1 1 0 011-1h6a1 1 0 011 1v2"
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4h6v3M4 7h16"
         />
     </svg>
 );
@@ -79,6 +74,13 @@ export default function ExpensiveProductsTable() {
     const [currentPage, setCurrentPage] = useState(1);
     const [isAddProductOpen, setIsAddProductOpen] = useState(false);
     const [isAddDupeOpen, setIsAddDupeOpen] = useState(false);
+    const [isDupeFoundsOpen, setIsDupeFoundsOpen] = useState(false);
+    const [selectedProductName, setSelectedProductName] = useState<string | null>(null);
+
+    const dupeFoundsList = [
+        "Neutrogena Deep Clean Facial Cleanser",
+        "PanOxyl Acne Foaming Wash",
+    ];
 
     const filteredProducts = products.filter(
         (p) =>
@@ -96,7 +98,7 @@ export default function ExpensiveProductsTable() {
             <div className="flex gap-2 mb-6">
                 <button
                     onClick={() => setActiveTab("expensive")}
-                    className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === "expensive"
+                    className={`px-5 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer ${activeTab === "expensive"
                         ? "bg-[#D8F3DC] text-[#3D7A6E]"
                         : "bg-white text-gray-500 border border-gray-200"
                         }`}
@@ -105,7 +107,7 @@ export default function ExpensiveProductsTable() {
                 </button>
                 <button
                     onClick={() => setActiveTab("dupe")}
-                    className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === "dupe"
+                    className={`px-5 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer ${activeTab === "dupe"
                         ? "bg-[#D8F3DC] text-[#3D7A6E]"
                         : "bg-white text-gray-500 border border-gray-200"
                         }`}
@@ -186,10 +188,16 @@ export default function ExpensiveProductsTable() {
                                         <span className="bg-[#F0CE94] text-[#7A6000] text-xs px-3 py-1 rounded-full font-medium">
                                             {product.dupeCount} dupes
                                         </span>
-                                        <button className="text-gray-400 hover:text-gray-600 transition-colors">
+                                        <button
+                                            onClick={() => {
+                                                setSelectedProductName(product.product);
+                                                setIsDupeFoundsOpen(true);
+                                            }}
+                                            className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                                        >
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
-                                                className="h-4 w-4"
+                                                className="h-5 w-5"
                                                 fill="none"
                                                 viewBox="0 0 24 24"
                                                 stroke="currentColor"
@@ -217,11 +225,11 @@ export default function ExpensiveProductsTable() {
                                         >
                                             +Dupe
                                         </button>
-                                        <button className="flex h-8 w-8 items-center justify-center rounded-md border border-[#e2dfd8] bg-[#f9f9f7] text-[#7e8794] transition-colors hover:bg-white hover:text-[#667180]">
+                                        <button className="flex h-8 w-8 items-center justify-center rounded-md border border-[#e2dfd8] bg-[#f9f9f7] text-[#7e8794] transition-colors hover:bg-white hover:text-[#667180] cursor-pointer">
                                             <EditIcon />
                                         </button>
                                         <button
-                                            className="flex h-8 w-8 items-center justify-center rounded-md border border-[#e2dfd8] bg-[#f9f9f7] text-[#7e8794] transition-colors hover:bg-white hover:text-[#677283]"
+                                            className="flex h-8 w-8 items-center justify-center rounded-md border border-[#e2dfd8] bg-[#f9f9f7] text-[#7e8794] transition-colors hover:bg-white hover:text-[#677283] cursor-pointer"
                                         >
                                             <TrashIcon />
                                         </button>
@@ -256,6 +264,13 @@ export default function ExpensiveProductsTable() {
 
             {isAddProductOpen ? <AddExpensiveProduct onClose={() => setIsAddProductOpen(false)} /> : null}
             {isAddDupeOpen ? <AddDupeEntry onClose={() => setIsAddDupeOpen(false)} /> : null}
+            {isDupeFoundsOpen ? (
+                <DupeFoundsModal
+                    onClose={() => setIsDupeFoundsOpen(false)}
+                    productName={selectedProductName ?? "Product"}
+                    dupeNames={dupeFoundsList}
+                />
+            ) : null}
         </div>
     );
 }
