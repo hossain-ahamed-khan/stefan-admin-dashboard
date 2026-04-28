@@ -242,7 +242,6 @@ export default function ProductTable() {
                                                 <EditIcon />
                                             </button>
                                             <button
-                                                onClick={() => handleDelete(product.id)}
                                                 className="flex h-8 w-8 items-center justify-center rounded-md border border-[#e2dfd8] bg-[#f9f9f7] text-[#7e8794] transition-colors hover:bg-white hover:text-[#677283]"
                                             >
                                                 <TrashIcon />

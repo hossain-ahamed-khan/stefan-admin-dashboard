@@ -40,6 +40,38 @@ const initialProducts: Product[] = [
     },
 ];
 
+const EditIcon = () => (
+    <svg
+        className="w-5 h-5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+    >
+        <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.8}
+            d="M15.232 5.232l3.536 3.536M9 13l6.768-6.768a2 2 0 012.828 2.828L11.828 15.828a2 2 0 01-1.414.586H8v-2.414A2 2 0 018.586 12.5z"
+        />
+    </svg>
+);
+
+const TrashIcon = () => (
+    <svg
+        className="w-5 h-5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+    >
+        <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.8}
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M8 7V5a1 1 0 011-1h6a1 1 0 011 1v2"
+        />
+    </svg>
+);
+
 export default function ExpensiveProductsTable() {
     const [activeTab, setActiveTab] = useState<"expensive" | "dupe">("expensive");
     const [searchQuery, setSearchQuery] = useState("");
@@ -185,40 +217,13 @@ export default function ExpensiveProductsTable() {
                                         >
                                             +Dupe
                                         </button>
-                                        <button className="h-9 w-9 rounded-lg border border-[#d8d6d1] bg-[#faf9f7] text-[#6f7786] transition-colors hover:bg-[#f3f1ed] cursor-pointer">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                className="mx-auto h-4 w-4"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                                strokeWidth={1.8}
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-1.414.586H9v-2.414a2 2 0 01.586-1.414z"
-                                                />
-                                            </svg>
+                                        <button className="flex h-8 w-8 items-center justify-center rounded-md border border-[#e2dfd8] bg-[#f9f9f7] text-[#7e8794] transition-colors hover:bg-white hover:text-[#667180]">
+                                            <EditIcon />
                                         </button>
                                         <button
-                                            onClick={() => handleDelete(product.id)}
-                                            className="h-9 w-9 rounded-lg border border-[#d8d6d1] bg-[#faf9f7] text-[#6f7786] transition-colors hover:bg-[#f3f1ed] cursor-pointer"
+                                            className="flex h-8 w-8 items-center justify-center rounded-md border border-[#e2dfd8] bg-[#f9f9f7] text-[#7e8794] transition-colors hover:bg-white hover:text-[#677283]"
                                         >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                className="mx-auto h-4 w-4"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                                strokeWidth={1.8}
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4h6v3M4 7h16"
-                                                />
-                                            </svg>
+                                            <TrashIcon />
                                         </button>
                                     </div>
                                 </div>
