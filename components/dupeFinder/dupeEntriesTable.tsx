@@ -103,12 +103,6 @@ export default function DupeEntriesTable() {
                         </div>
                     </div>
                 </div>
-                <button
-                    onClick={() => setIsAddDupeOpen(true)}
-                    className="bg-[#2D6A4F] text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-[#234820] transition-colors cursor-pointer"
-                >
-                    + Add dupe entry
-                </button>
             </div>
 
             {/* Table */}

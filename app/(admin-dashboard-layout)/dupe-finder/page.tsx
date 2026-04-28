@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import AddDupeEntry from "@/components/dupeFinder/addDupeEntryModal";
 import AddExpensiveProduct from "@/components/dupeFinder/addExpensiveProductModal";
 import DupeEntriesTable from "@/components/dupeFinder/dupeEntriesTable";
 
@@ -45,6 +46,7 @@ export default function ExpensiveProductsTable() {
     const [products, setProducts] = useState<Product[]>(initialProducts);
     const [currentPage, setCurrentPage] = useState(1);
     const [isAddProductOpen, setIsAddProductOpen] = useState(false);
+    const [isAddDupeOpen, setIsAddDupeOpen] = useState(false);
 
     const filteredProducts = products.filter(
         (p) =>
@@ -177,10 +179,13 @@ export default function ExpensiveProductsTable() {
 
                                     {/* Actions */}
                                     <div className="flex items-center gap-1">
-                                        <button className="h-9 min-w-[84px] rounded-lg border border-[#d8d6d1] bg-[#faf9f7] px-2.5 text-sm font-semibold leading-none text-[#6f7786] transition-colors hover:bg-[#f3f1ed]">
+                                        <button
+                                            onClick={() => setIsAddDupeOpen(true)}
+                                            className="h-9 min-w-[84px] rounded-lg border border-[#d8d6d1] bg-[#faf9f7] px-2.5 text-sm font-semibold leading-none text-[#6f7786] transition-colors hover:bg-[#f3f1ed] cursor-pointer"
+                                        >
                                             +Dupe
                                         </button>
-                                        <button className="h-9 w-9 rounded-lg border border-[#d8d6d1] bg-[#faf9f7] text-[#6f7786] transition-colors hover:bg-[#f3f1ed]">
+                                        <button className="h-9 w-9 rounded-lg border border-[#d8d6d1] bg-[#faf9f7] text-[#6f7786] transition-colors hover:bg-[#f3f1ed] cursor-pointer">
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 className="mx-auto h-4 w-4"
@@ -198,7 +203,7 @@ export default function ExpensiveProductsTable() {
                                         </button>
                                         <button
                                             onClick={() => handleDelete(product.id)}
-                                            className="h-9 w-9 rounded-lg border border-[#d8d6d1] bg-[#faf9f7] text-[#6f7786] transition-colors hover:bg-[#f3f1ed]"
+                                            className="h-9 w-9 rounded-lg border border-[#d8d6d1] bg-[#faf9f7] text-[#6f7786] transition-colors hover:bg-[#f3f1ed] cursor-pointer"
                                         >
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -245,6 +250,7 @@ export default function ExpensiveProductsTable() {
             )}
 
             {isAddProductOpen ? <AddExpensiveProduct onClose={() => setIsAddProductOpen(false)} /> : null}
+            {isAddDupeOpen ? <AddDupeEntry onClose={() => setIsAddDupeOpen(false)} /> : null}
         </div>
     );
 }
