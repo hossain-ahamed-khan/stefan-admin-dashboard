@@ -151,7 +151,7 @@ export default function AddInternalProduct({ onClose }: AddInternalProductProps)
                             <div className="flex items-center gap-2 mt-5">
                                 <button
                                     onClick={() => setVerified(!verified)}
-                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${verified ? "bg-teal-500" : "bg-teal-400"}`}
+                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${verified ? "bg-[#74C69D]" : "bg-gray-300"}`}
                                 >
                                     <span
                                         className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${verified ? "translate-x-6" : "translate-x-1"}`}

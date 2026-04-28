@@ -125,12 +125,10 @@ export default function AddDupeEntry({ onClose }: AddDupeEntryProps) {
                                 {/* Toggle */}
                                 <button
                                     onClick={() => setVerified(!verified)}
-                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${verified ? "bg-[#2d5a3d]" : "bg-sky-300"
-                                        }`}
+                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${verified ? "bg-[#74C69D]" : "bg-gray-300"}`}
                                 >
                                     <span
-                                        className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${verified ? "translate-x-6" : "translate-x-1"
-                                            }`}
+                                        className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${verified ? "translate-x-6" : "translate-x-1"}`}
                                     />
                                 </button>
                                 <span className="text-sm text-gray-600">Mark as verified</span>
