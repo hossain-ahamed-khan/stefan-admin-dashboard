@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import AddRoutineProduct from "@/components/routineProduct/addRoutineProductModal";
 
 type SkinType = "Oily" | "Acne-prone" | "Dry" | "Sensitive" | "Normal";
 type Slot = "Both" | "AM" | "PM";
@@ -24,40 +25,63 @@ const SAMPLE_DATA: Product[] = [
     { id: 4, brand: "CeraVe", product: "Hydrating Facial Cleanser", category: "Cleanser", slot: "Both", skinTypes: ["Oily", "Acne-prone"], price: "£11", priority: 11, verified: true },
 ];
 
-const CATEGORY_COLORS: Record<Category, string> = {
-    Cleanser: "bg-purple-200 text-purple-700",
-    Moisturiser: "bg-blue-200 text-blue-700",
-    Serum: "bg-yellow-200 text-yellow-700",
-    SPF: "bg-orange-200 text-orange-700",
-    Toner: "bg-pink-200 text-pink-700",
+const SKIN_TYPE_COLORS: Record<SkinType, string> = {
+    Oily: "bg-[#74C69D] text-white",
+    "Acne-prone": "bg-[#74C69D] text-white",
+    Dry: "bg-[#74C69D] text-white",
+    Sensitive: "bg-[#74C69D] text-white",
+    Normal: "bg-[#74C69D] text-white",
 };
 
-const SKIN_TYPE_COLORS: Record<SkinType, string> = {
-    Oily: "bg-emerald-400 text-white",
-    "Acne-prone": "bg-emerald-400 text-white",
-    Dry: "bg-sky-400 text-white",
-    Sensitive: "bg-rose-400 text-white",
-    Normal: "bg-teal-400 text-white",
-};
+const EditIcon = () => (
+    <svg
+        className="w-5 h-5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+    >
+        <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.8}
+            d="M15.232 5.232l3.536 3.536M9 13l6.768-6.768a2 2 0 012.828 2.828L11.828 15.828a2 2 0 01-1.414.586H8v-2.414A2 2 0 018.586 12.5z"
+        />
+    </svg>
+);
+
+const TrashIcon = () => (
+    <svg
+        className="w-5 h-5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+    >
+        <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.8}
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M8 7V5a1 1 0 011-1h6a1 1 0 011 1v2"
+        />
+    </svg>
+);
 
 export default function DupeProductsTable() {
     const [search, setSearch] = useState("");
-    const [category, setCategory] = useState("All categories");
     const [slot, setSlot] = useState("All slots");
     const [page, setPage] = useState(1);
+    const [isAddRoutineProductOpen, setIsAddRoutineProductOpen] = useState(false);
 
     const filtered = SAMPLE_DATA.filter((p) => {
         const matchesSearch =
             search === "" ||
             p.brand.toLowerCase().includes(search.toLowerCase()) ||
             p.product.toLowerCase().includes(search.toLowerCase());
-        const matchesCategory = category === "All categories" || p.category === category;
         const matchesSlot = slot === "All slots" || p.slot === slot;
-        return matchesSearch && matchesCategory && matchesSlot;
+        return matchesSearch && matchesSlot;
     });
 
     return (
-        <div className="min-h-screen bg-stone-100 p-8 font-sans">
+        <div className="min-h-screen bg-[#faf8f5] p-8 font-sans">
             {/* Toolbar */}
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
@@ -69,22 +93,8 @@ export default function DupeProductsTable() {
                         onChange={(e) => setSearch(e.target.value)}
                         className="rounded-lg border border-stone-200 bg-white px-4 py-2 text-sm text-stone-600 placeholder-stone-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 w-56"
                     />
-                    {/* Category dropdown */}
-                    <div className="relative">
-                        <select
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                            className="appearance-none rounded-lg border border-stone-200 bg-white px-4 py-2 pr-8 text-sm text-stone-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 cursor-pointer"
-                        >
-                            <option>All categories</option>
-                            <option>Cleanser</option>
-                            <option>Moisturiser</option>
-                            <option>Serum</option>
-                            <option>SPF</option>
-                            <option>Toner</option>
-                        </select>
-                        <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-stone-400">▾</span>
-                    </div>
+                    {/* Category dropdown removed */}
+
                     {/* Slot dropdown */}
                     <div className="relative">
                         <select
@@ -94,18 +104,26 @@ export default function DupeProductsTable() {
                         >
                             <option>All slots</option>
                             <option>Both</option>
-                            <option>AM</option>
-                            <option>PM</option>
+                            <option>Morning</option>
+                            <option>Evening</option>
                         </select>
                         <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-stone-400">▾</span>
                     </div>
                 </div>
 
                 {/* Add product button */}
-                <button className="rounded-lg bg-emerald-700 px-5 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-800 transition-colors">
+                <button
+                    type="button"
+                    onClick={() => setIsAddRoutineProductOpen(true)}
+                    className="rounded-lg bg-[#2D6A4F] px-5 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-emerald-800"
+                >
                     + Add product
                 </button>
             </div>
+
+            {isAddRoutineProductOpen ? (
+                <AddRoutineProduct onClose={() => setIsAddRoutineProductOpen(false)} />
+            ) : null}
 
             {/* Table */}
             <div className="rounded-2xl border border-stone-200 bg-white shadow-sm overflow-hidden">
@@ -139,7 +157,10 @@ export default function DupeProductsTable() {
                                     <td className="py-4 px-6 text-center">{product.brand}</td>
                                     <td className="py-4 px-6 text-center">{product.product}</td>
                                     <td className="py-4 px-6 text-center">
-                                        <span className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${CATEGORY_COLORS[product.category]}`}>
+                                        <span
+                                            className="inline-block rounded-full px-3 py-1 text-xs font-medium text-purple-900"
+                                            style={{ backgroundColor: "#CDBDFF" }}
+                                        >
                                             {product.category}
                                         </span>
                                     </td>
@@ -160,7 +181,7 @@ export default function DupeProductsTable() {
                                     <td className="py-4 px-6 text-center">{product.priority}</td>
                                     <td className="py-4 px-6 text-center">
                                         {product.verified ? (
-                                            <span className="inline-block rounded-full bg-emerald-400 px-4 py-1 text-xs font-medium text-white">
+                                            <span className="inline-block rounded-full bg-[#74C69D] px-4 py-1 text-xs font-medium text-white">
                                                 Verified
                                             </span>
                                         ) : (
@@ -169,17 +190,15 @@ export default function DupeProductsTable() {
                                             </span>
                                         )}
                                     </td>
-                                    <td className="py-4 px-6 text-center">
-                                        <div className="flex items-center justify-center gap-2">
-                                            <button className="text-stone-400 hover:text-stone-600 transition-colors p-1" title="Edit">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
-                                                </svg>
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center gap-3">
+                                            <button className="flex h-8 w-8 items-center justify-center rounded-md border border-[#e2dfd8] bg-[#f9f9f7] text-[#7e8794] transition-colors hover:bg-white hover:text-[#667180]">
+                                                <EditIcon />
                                             </button>
-                                            <button className="text-stone-400 hover:text-red-500 transition-colors p-1" title="Delete">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                                </svg>
+                                            <button
+                                                className="flex h-8 w-8 items-center justify-center rounded-md border border-[#e2dfd8] bg-[#f9f9f7] text-[#7e8794] transition-colors hover:bg-white hover:text-[#677283]"
+                                            >
+                                                <TrashIcon />
                                             </button>
                                         </div>
                                     </td>

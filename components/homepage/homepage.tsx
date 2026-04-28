@@ -96,7 +96,7 @@ export default function Dashboard() {
                   <td className="px-6 py-4 text-gray-600">{user.plan}</td>
                   <td className="px-6 py-4 text-gray-600">{user.joined}</td>
                   <td className="px-6 py-4">
-                    <span className="bg-[#5bbf8a] text-white text-xs px-3 py-1 rounded-full">
+                    <span className="bg-[#74C69D] text-white text-xs px-3 py-1 rounded-full">
                       {user.status}
                     </span>
                   </td>

@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import AddExpensiveProduct from "@/components/dupeFinder/addExpensiveProductModal";
 import DupeEntriesTable from "@/components/dupeFinder/dupeEntriesTable";
 
 interface Product {
@@ -43,6 +44,7 @@ export default function ExpensiveProductsTable() {
     const [searchQuery, setSearchQuery] = useState("");
     const [products, setProducts] = useState<Product[]>(initialProducts);
     const [currentPage, setCurrentPage] = useState(1);
+    const [isAddProductOpen, setIsAddProductOpen] = useState(false);
 
     const filteredProducts = products.filter(
         (p) =>
@@ -89,7 +91,10 @@ export default function ExpensiveProductsTable() {
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm text-gray-600 placeholder-gray-400 w-64 focus:outline-none focus:ring-1 focus:ring-[#4a9e5c]"
                         />
-                        <button className="bg-[#2D6A4F] text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-[#234820] transition-colors">
+                        <button
+                            onClick={() => setIsAddProductOpen(true)}
+                            className="bg-[#2D6A4F] text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-[#234820] transition-colors cursor-pointer"
+                        >
                             + Add expensive product
                         </button>
                     </div>
@@ -238,6 +243,8 @@ export default function ExpensiveProductsTable() {
             ) : (
                 <DupeEntriesTable />
             )}
+
+            {isAddProductOpen ? <AddExpensiveProduct onClose={() => setIsAddProductOpen(false)} /> : null}
         </div>
     );
 }

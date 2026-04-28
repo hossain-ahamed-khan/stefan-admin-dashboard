@@ -56,7 +56,7 @@ export function NavMain({
                 <SidebarMenuButton
                   tooltip={item.title}
                   isActive={sectionIsActive}
-                  className="h-12 rounded-lg px-3.5 text-[15px] font-medium tracking-[-0.01em] text-[#687284] hover:bg-transparent hover:text-[#5f6778] data-active:bg-[#2f7b5e] data-active:text-white data-active:shadow-none data-active:ring-0 [&_svg]:size-[18px] [&_svg]:stroke-[2]"
+                  className="h-12 rounded-lg px-3.5 text-[15px] font-medium tracking-[-0.01em] text-[#687284] transition-colors hover:bg-[#e9efe7] hover:text-[#2f7b5e] hover:[&_svg]:text-[#2f7b5e] data-active:bg-[#2f7b5e] data-active:text-white data-active:shadow-none data-active:ring-0 [&_svg]:size-[18px] [&_svg]:stroke-[2]"
                   asChild
                 >
                   <Link href={item.url}>

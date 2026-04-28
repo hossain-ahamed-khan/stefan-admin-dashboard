@@ -23,7 +23,7 @@ export default function AdminAccount() {
     };
 
     return (
-        <div className="min-h-screen bg-[#f0ede8] flex items-center justify-center p-6 font-sans">
+        <div className="min-h-screen bg-[#faf8f5] flex items-center justify-center p-6 font-sans">
             <div className="w-full max-w-2xl bg-[#f7f5f1] border border-[#e0dbd2] rounded-2xl p-8 shadow-sm">
                 {/* Title */}
                 <h2 className="text-xl font-semibold text-[#1a1a1a] mb-6 tracking-tight">
