@@ -3,6 +3,7 @@
 import type { ReactNode } from "react"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
+import image from "@/public/images/avatar-admin.png"
 
 import { AppSidebar } from "@/components/app-sidebar"
 import {
@@ -19,6 +20,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import RequireAuth from "./RequireAuth/RequireAuth"
 
 type DashboardShellProps = {
   section: string
@@ -41,43 +43,45 @@ export function DashboardShell({ section, children }: DashboardShellProps) {
     : section
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b border-zinc-200 bg-[#faf8f5] transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>{routeSection}</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          </div>
-          <div className="ml-auto flex items-center px-4">
-            <div className="flex items-center gap-3">
-              <div className="text-right">
-                <p className="text-md leading-tight font-semibold text-slate-700">Alex Johnson</p>
-                <p className="text-sm leading-tight font-normal text-slate-500">Super admin</p>
-              </div>
-              <Image
-                src="/avatar-admin.svg"
-                alt="Alex Johnson"
-                width={48}
-                height={48}
-                className="size-12 shrink-0 rounded-full object-cover"
-                priority
-              />
+    <RequireAuth tokenKey="authToken" redirectTo="/admin-login">
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarInset>
+          <header className="flex h-16 shrink-0 items-center gap-2 border-b border-zinc-200 bg-[#faf8f5] transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+            <div className="flex items-center gap-2 px-4">
+              <SidebarTrigger className="-ml-1" />
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem className="hidden md:block">
+                    <BreadcrumbLink className="font-geist-mono text-[#323438] text-xl font-bold leading-7" href="/">Dashboard</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator className="hidden md:block" />
+                  <BreadcrumbItem>
+                    <BreadcrumbPage className="font-geist-mono text-[#1F2937] text-xl font-bold leading-7">{routeSection}</BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
             </div>
-          </div>
-        </header>
-        <div className="flex flex-1 flex-col p-4 pt-0">{children}</div>
-      </SidebarInset>
-    </SidebarProvider>
+            <div className="ml-auto flex items-center px-4">
+              <div className="flex items-center gap-3">
+                <div className="text-right">
+                  <p className="text-md leading-tight font-semibold text-slate-700">Alex Johnson</p>
+                  <p className="text-sm leading-tight font-normal text-slate-500">Super admin</p>
+                </div>
+                <Image
+                  src={image}
+                  alt="Alex Johnson"
+                  width={480}
+                  height={480}
+                  className="size-16 shrink-0 rounded-full object-cover"
+                  priority
+                />
+              </div>
+            </div>
+          </header>
+          <div className="flex flex-1 flex-col p-4 pt-0">{children}</div>
+        </SidebarInset>
+      </SidebarProvider>
+    </RequireAuth>
   )
 }
