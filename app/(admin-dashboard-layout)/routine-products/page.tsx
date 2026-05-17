@@ -178,14 +178,14 @@ export default function RoutineProductsTable() {
                     <div className="flex items-center gap-3">
                       <button
                         onClick={() => setSelectedProduct(product)}
-                        className="flex h-8 w-8 items-center justify-center rounded-md border border-[#e2dfd8] bg-[#f9f9f7] text-[#7e8794] transition-colors hover:bg-white hover:text-[#667180]"
+                        className="cursor-pointer flex w-9 h-9 items-center justify-center rounded-md border border-[#e2dfd8] bg-[#f9f9f7] text-[#7e8794] transition-colors hover:bg-white hover:text-[#667180]"
                       >
                         <EditIcon />
                       </button>
                       <button
                         onClick={() => handleDelete(product.product_id!)}
                         disabled={isDeleting}
-                        className="flex h-8 w-8 items-center justify-center rounded-md border border-[#e2dfd8] bg-[#f9f9f7] text-[#7e8794] transition-colors hover:bg-red-50 hover:text-red-400 hover:border-red-200 disabled:opacity-40"
+                        className="cursor-pointer flex h-9 w-9 items-center justify-center rounded-md border border-[#e2dfd8] bg-[#f9f9f7] text-[#7e8794] transition-colors hover:bg-red-50 hover:text-red-400 hover:border-red-200 disabled:opacity-40"
                       >
                         <TrashIcon />
                       </button>
