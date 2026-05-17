@@ -105,11 +105,11 @@ export default function DupeFoundsModal({
                 <div className="px-8 pb-7 flex items-center justify-end gap-4">
                     <button
                         onClick={onClose}
-                        className="min-w-[130px] rounded-xl border border-[#e6e1da] bg-white px-6 py-2.5 text-sm font-semibold text-[#6b7280] shadow-sm transition-colors hover:bg-[#f7f5f1]"
+                        className="min-w-33 rounded-xl border border-[#e6e1da] bg-white px-6 py-2.5 text-sm font-semibold text-[#6b7280] shadow-sm transition-colors hover:bg-[#f7f5f1]"
                     >
                         Cancel
                     </button>
-                    <button className="min-w-[150px] rounded-xl bg-[#2d6a4f] px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#24553f]">
+                    <button className="min-w-38 rounded-xl bg-[#2d6a4f] px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#24553f]">
                         Save
                     </button>
                 </div>
