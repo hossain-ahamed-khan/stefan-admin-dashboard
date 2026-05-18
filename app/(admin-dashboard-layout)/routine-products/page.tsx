@@ -203,17 +203,17 @@ export default function RoutineProductsTable() {
         <button
           onClick={() => setPage((p) => Math.max(1, p - 1))}
           disabled={page === 1}
-          className="flex items-center justify-center w-8 h-8 rounded-lg border border-stone-200 bg-white text-stone-500 hover:bg-stone-50 transition-colors shadow-sm disabled:opacity-40"
+          className="flex items-center justify-center cursor-pointer w-10 h-10 rounded-lg border border-stone-200 bg-white text-stone-500 hover:bg-stone-50 transition-colors shadow-sm disabled:opacity-40"
         >‹</button>
-        <span className="flex items-center justify-center w-8 h-8 rounded-lg border border-stone-200 bg-white text-stone-700 font-medium shadow-sm text-sm">
+        <span className="flex items-center justify-center cursor-pointer w-10 h-10 rounded-lg border border-stone-200 bg-white text-stone-700 font-medium shadow-sm text-sm">
           {page}
         </span>
         <button
           onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
           disabled={page === totalPages}
-          className="flex items-center justify-center w-8 h-8 rounded-lg border border-stone-200 bg-white text-stone-500 hover:bg-stone-50 transition-colors shadow-sm disabled:opacity-40"
+          className="flex items-center justify-center cursor-pointer w-10 h-10 rounded-lg border border-stone-200 bg-white text-stone-500 hover:bg-stone-50 transition-colors shadow-sm disabled:opacity-40"
         >›</button>
-        <span className="text-xs text-gray-400 ml-2">{data?.count ?? 0} total products</span>
+        <span className="text-sm text-gray-600 ml-2"> Total {data?.count ?? 0} products</span>
       </div>
 
       {/* Modals */}

@@ -97,7 +97,7 @@ export default function AdminDashboardLogin() {
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Please Enter your email"
                             required
-                            className="font-sans w-full border border-[#a5a59d] bg-[#FBFBFB] text-[#1A1A18] placeholder-[#5a5a55] rounded-lg px-4 py-4 text-lg outline-none focus:ring-2 focus:ring-blue-500 transition"
+                            className="font-sans w-full border border-[#a5a59d] bg-[#FBFBFB] text-[#1A1A18] placeholder-[#5a5a55] rounded-lg px-4 py-3 text-lg outline-none focus:ring-2 focus:ring-blue-500 transition"
                         />
                     </div>
 
@@ -113,7 +113,7 @@ export default function AdminDashboardLogin() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="••••••••••"
                                 required
-                                className="w-full border border-[#a5a59d] bg-[#FBFBFB] text-[#1A1A18] placeholder-[#1A1A18] rounded-lg px-4 py-4 pr-11 text-lg outline-none focus:ring-2 focus:ring-blue-500 transition"
+                                className="w-full border border-[#a5a59d] bg-[#FBFBFB] text-[#1A1A18] placeholder-[#1A1A18] rounded-lg px-4 py-3 pr-11 text-lg outline-none focus:ring-2 focus:ring-blue-500 transition"
                             />
                             <button
                                 type="button"

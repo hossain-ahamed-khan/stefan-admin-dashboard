@@ -96,7 +96,7 @@ export default function EnterOtpPage() {
   const isComplete = otp.every((d) => d !== "");
 
   return (
-    <div className="min-h-screen bg-[#171F33] flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen bg-[#FAF8F5] flex flex-col items-center justify-center px-4">
       {/* Logo */}
       <div className="relative w-63 h-38 rounded-2xl overflow-hidden -mt-40">
         <Image
@@ -120,10 +120,10 @@ export default function EnterOtpPage() {
           </div>
         </div>
 
-        <h2 className="text-2xl font-semibold text-white text-center mb-2">
+        <h2 className="font-inter text-3xl font-semibold text-[#1A1A18] text-center mb-2">
           Verify Your Account
         </h2>
-        <p className="text-sm text-slate-400 text-center mb-8">
+         <p className="text-sm font-normal text-[#1A1A18] text-center mb-8">
           We sent a 6-digit code to your email.{" "}
           <br />
           Please enter it below to continue.
@@ -156,7 +156,7 @@ export default function EnterOtpPage() {
           </div>
 
           {/* Resend */}
-          <p className="text-center text-sm text-slate-400">
+          <p className="text-center text-sm text-[#1A1A18]">
             Didn&apos;t receive the code?{" "}
             <button
               type="button"
@@ -198,7 +198,7 @@ export default function EnterOtpPage() {
                   setIsResending(false);
                 }
               }}
-              className="cursor-pointer text-blue-400 hover:text-blue-300 font-medium transition"
+              className="cursor-pointer font-medium transition"
             >
               Resend
             </button>
@@ -208,8 +208,9 @@ export default function EnterOtpPage() {
           <button
             type="submit"
             disabled={!isComplete || isVerifying}
-            className={`w-full py-3 rounded-lg font-medium text-sm transition-all duration-200 ${isComplete
-              ? "bg-linear-to-r from-blue-500 to-blue-600 text-white" : "bg-slate-700 text-slate-400"}
+            //  className="cursor-pointer w-full py-3 rounded-lg bg-[#2D6A4F] text-white font-medium text-sm transition-all duration-200  shadow-blue-500/30 active:scale-[0.98] disabled:opacity-50"
+            className={`cursor-pointer w-full py-3 rounded-lg bg-[#2D6A4F] text-white font-medium text-sm transition-all duration-200 shadow-lg ${isComplete
+              ? "bg-[#2D6A4F] text-white" : "bg-[#2D6A4F] text-slate-400"}
                 ${isVerifying ? "opacity-50 cursor-not-allowed" : ""}`}>
             {isVerifying ? "Verifying..." : "Verify Code"}
           </button>
@@ -219,7 +220,7 @@ export default function EnterOtpPage() {
             <Link href="/admin-login">
               <button
                 type="button"
-                className="cursor-pointer text-sm text-slate-400 hover:text-white transition inline-flex items-center gap-1"
+                className="cursor-pointer text-sm text-[#1A1A18] hover:text-black transition inline-flex items-center gap-1"
                 onClick={() => console.log("Back to login")}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

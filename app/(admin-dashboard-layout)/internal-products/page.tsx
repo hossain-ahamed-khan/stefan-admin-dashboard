@@ -225,17 +225,17 @@ export default function ProductTable() {
         <button
           onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
           disabled={currentPage === 1}
-          className="w-8 h-8 flex items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-40 transition-colors text-sm"
+          className="cursor-pointer w-10 h-10 flex items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-40 transition-colors text-sm"
         >‹</button>
-        <div className="w-8 h-8 flex items-center justify-center rounded-md border border-gray-200 bg-white text-sm text-gray-700 font-medium">
+        <div className="cursor-pointer w-10 h-10 flex items-center justify-center rounded-md border border-gray-200 bg-white text-sm text-gray-700 font-medium">
           {currentPage}
         </div>
         <button
           onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
           disabled={currentPage === totalPages}
-          className="w-8 h-8 flex items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-40 transition-colors text-sm"
+          className="cursor-pointer w-10 h-10 flex items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-40 transition-colors text-sm"
         >›</button>
-        <span className="text-xs text-gray-400 ml-2">{data?.count ?? 0} total products</span>
+        <span className="text-sm text-gray-600 ml-2"> Total {data?.count ?? 0} products</span>
       </div>
 
       {/* Modals */}

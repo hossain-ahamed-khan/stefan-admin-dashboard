@@ -221,7 +221,7 @@ export default function ExpensiveProductsTable() {
                             disabled={currentPage === totalPages}
                             className="cursor-pointer w-10 h-10 flex items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 transition-colors text-sm disabled:opacity-40"
                         >›</button>
-                        <span className="text-xs text-gray-400 ml-2">{data?.count ?? 0} total products</span>
+                        <span className="text-sm text-gray-600 ml-2"> Total {data?.count ?? 0} products</span>
                     </div>
                 </>
             ) : (

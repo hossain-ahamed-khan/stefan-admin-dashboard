@@ -257,13 +257,13 @@ export default function UserTable() {
                 <button
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
                     disabled={page === 1}
-                    className="w-8 h-8 flex items-center justify-center border rounded-lg bg-white disabled:opacity-40"
+                    className="cursor-pointer w-10 h-10 flex items-center justify-center border rounded-lg bg-white disabled:opacity-40"
                     style={{ borderColor: "#e2ddd5", color: "#555" }}
                 >
                     <ChevronLeft />
                 </button>
 
-                <button className="w-8 h-8 flex items-center justify-center border rounded-lg text-sm font-medium text-white"
+                <button className="cursor-pointer w-10 h-10 flex items-center justify-center border rounded-lg text-sm font-medium text-white"
                     style={{ backgroundColor: "#5bc4a0", borderColor: "#5bc4a0" }}>
                     {page}
                 </button>
@@ -271,13 +271,13 @@ export default function UserTable() {
                 <button
                     onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                     disabled={page === totalPages}
-                    className="w-8 h-8 flex items-center justify-center border rounded-lg bg-white disabled:opacity-40"
+                    className="cursor-pointer w-10 h-10 flex items-center justify-center border rounded-lg bg-white disabled:opacity-40"
                     style={{ borderColor: "#e2ddd5", color: "#555" }}
                 >
                     <ChevronRight />
                 </button>
 
-                <span className="text-xs text-gray-400 ml-2">
+                <span className="text-sm text-gray-400 ml-2">
                     {data?.count ?? 0} total users
                 </span>
             </div>

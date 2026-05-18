@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import authImage from "@/public/images/auth-image.png";
-import Link from "next/link";
 import Swal from "sweetalert2";
 import { ForgotPasswordRequest } from "@/apis/authApis";
 import { useRouter } from "next/navigation";
@@ -61,7 +60,7 @@ export default function ForgetPasswordPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#171F33] flex flex-col items-center justify-center px-4">
+        <div className="min-h-screen bg-[#FAF8F5] flex flex-col items-center justify-center px-4">
             {/* Logo / Top Image */}
             <div className="relative w-63 h-38 rounded-2xl overflow-hidden -mt-40">
                 <Image
@@ -76,26 +75,26 @@ export default function ForgetPasswordPage() {
 
             {/* Card */}
             <div className="w-full max-w-md mt-5">
-                <h2 className="font-inter text-3xl font-semibold text-white text-center mb-2">
+                <h2 className="font-inter text-3xl font-semibold text-[#1A1A18] text-center mb-2">
                     Forget Password
                 </h2>
 
-                <p className="text-sm text-slate-400 text-center mb-8">
+                 <p className="text-sm font-normal text-[#1A1A18] text-center mb-8">
                     Please enter your email to get verification code
                 </p>
 
                 {/* Email */}
                 <div className="space-y-2 mb-5">
-                    <label className="block text-sm text-slate-300 font-medium">
+                     <label className="block text-[16px] text-[#1A1A18] font-medium">
                         Email address
                     </label>
                     <input
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="esteban_schiller@gmail.com"
+                        placeholder="Enter your email"
                         required
-                        className="w-full bg-white text-slate-800 placeholder-slate-400 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500 transition"
+                         className="font-sans w-full border border-[#a5a59d] bg-[#FBFBFB] text-[#1A1A18] placeholder-[#5a5a55] rounded-lg px-4 py-3 text-lg outline-none focus:ring-2 focus:ring-blue-500 transition"
                     />
                 </div>
 
@@ -103,12 +102,10 @@ export default function ForgetPasswordPage() {
                 <Button
                     onClick={handleSubmit}
                     disabled={loading}
-                    className="cursor-pointer w-full py-5.5 rounded-lg bg-linear-to-r from-[#BAC3FF] to-[#004FD2] hover:from-[#FD0778] hover:to-[#FE5E08] text-white font-medium text-sm transition-all duration-200 shadow-lg shadow-blue-500/30 active:scale-[0.98]">
+                     className="cursor-pointer w-full py-5.5 rounded-lg bg-[#2D6A4F] text-white font-medium text-sm transition-all duration-200 shadow-lg shadow-blue-500/30 active:scale-[0.98] disabled:opacity-50">
                     {loading ? "Sending..." : "Continue"}
                 </Button>
             </div>
-
-
         </div>
     );
 }

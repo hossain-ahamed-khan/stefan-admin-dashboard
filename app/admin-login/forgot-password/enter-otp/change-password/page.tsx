@@ -112,7 +112,7 @@ export default function AdminDashboardResetPassword() {
   );
 
   return (
-    <div className="min-h-screen bg-[#171F33] flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen bg-[#FAF8F5] flex flex-col items-center justify-center px-4">
       {/* Logo / Top Image */}
       <div className="flex flex-col items-center">
         <div className="relative w-63 h-38 rounded-2xl overflow-hidden -mt-40">
@@ -129,17 +129,17 @@ export default function AdminDashboardResetPassword() {
 
       {/* Card */}
       <div className="w-full max-w-md">
-        <h2 className="font-inter text-3xl font-semibold text-white text-center mb-2">
+        <h2 className="font-inter text-3xl font-semibold text-[#1A1A18] text-center mb-2">
           Reset Password
         </h2>
-        <p className="text-sm text-slate-400 text-center mb-8">
+        <p className="text-sm font-normal text-[#1A1A18] text-center mb-8">
           Enter your new password below
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* New Password */}
           <div className="space-y-1.5">
-            <label className="block text-sm text-slate-300 font-medium">
+            <label className="block text-[16px] text-[#1A1A18] font-medium">
               Password
             </label>
             <div className="relative">
@@ -149,7 +149,7 @@ export default function AdminDashboardResetPassword() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••"
                 required
-                className="w-full bg-white text-slate-800 placeholder-slate-400 rounded-lg px-4 py-3 pr-11 text-sm outline-none focus:ring-2 focus:ring-blue-500 transition"
+                 className="font-sans w-full border border-[#a5a59d] bg-[#FBFBFB] text-[#1A1A18] placeholder-[#5a5a55] rounded-lg px-4 py-3 text-lg outline-none focus:ring-2 focus:ring-blue-500 transition"
               />
               <button
                 type="button"
@@ -167,7 +167,7 @@ export default function AdminDashboardResetPassword() {
 
           {/* Confirm Password */}
           <div className="space-y-1.5">
-            <label className="block text-sm text-slate-300 font-medium">
+            <label className="block text-[16px] text-[#1A1A18] font-medium">
               Confirm Password
             </label>
             <div className="relative">
@@ -177,7 +177,7 @@ export default function AdminDashboardResetPassword() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="••••••••••"
                 required
-                className={`w-full bg-white text-slate-800 placeholder-slate-400 rounded-lg px-4 py-3 pr-11 text-sm outline-none focus:ring-2 transition ${!passwordsMatch ? "focus:ring-red-400 ring-2 ring-red-400" : "focus:ring-blue-500"
+                className={`font-sans w-full border border-[#a5a59d] bg-[#FBFBFB] text-[#1A1A18] placeholder-[#5a5a55] rounded-lg px-4 py-3 text-lg outline-none focus:ring-2 focus:ring-blue-500 transition ${!passwordsMatch ? "focus:ring-red-400 ring-2 ring-red-400" : "focus:ring-blue-500"
                   }`}
               />
               <button
@@ -201,9 +201,9 @@ export default function AdminDashboardResetPassword() {
           <button
             type="submit"
             disabled={!isValid}
-            className={`cursor-pointer w-full py-3 rounded-lg text-white font-medium text-sm transition-all duration-200 shadow-lg active:scale-[0.98] ${isValid
-              ? "bg-linear-to-r from-[#BAC3FF] to-[#004FD2] hover:from-[#FD0778] hover:to-[#FE5E08] shadow-blue-500/30"
-              : "bg-slate-600 opacity-50 cursor-not-allowed shadow-none"
+            className={`cursor-pointer w-full py-3 rounded-lg bg-[#2D6A4F] text-white font-medium text-sm transition-all duration-200 shadow-lg active:scale-[0.98] ${isValid
+              ? "bg-[#2D6A4F] shadow-blue-500/30"
+              : "bg-[#2D6A4F] cursor-not-allowed shadow-none"
               }`}
           >
             Reset Password
@@ -213,7 +213,7 @@ export default function AdminDashboardResetPassword() {
           <div className="text-center">
             <Link
               href="/admin-login"
-              className="text-sm text-slate-400 hover:text-white transition inline-flex items-center gap-1"
+              className="text-sm text-[#1A1A18] transition inline-flex items-center gap-1"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
