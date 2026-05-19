@@ -29,10 +29,8 @@ export default function ExpensiveProductsTable() {
     const [currentPage, setCurrentPage] = useState(1);
     const [isAddProductOpen, setIsAddProductOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<ExpensiveProduct | null>(null);
-    const [isDupeFoundsOpen, setIsDupeFoundsOpen] = useState(false);
-    const [isAddDupeOpen,  setIsAddDupeOpen] = useState(false);
-    const [selectedProductName, setSelectedProductName] = useState<string | null>(null);
-    const [dupeFoundsList, setDupeFoundsList] = useState<string[]>([]);
+    const [isAddDupeOpen, setIsAddDupeOpen] = useState(false);
+    const [selectedDupeProduct, setSelectedDupeProduct] = useState<ExpensiveProduct | null>(null);
 
     const { data, isLoading } = useGetExpensiveProducts({
         page: currentPage,
@@ -166,9 +164,7 @@ export default function ExpensiveProductsTable() {
                                         </span>
                                         <button
                                             onClick={() => {
-                                                setSelectedProductName(product.product_name);
-                                                setDupeFoundsList(product.search_terms.split(",").map((s) => s.trim()));
-                                                setIsDupeFoundsOpen(true);
+                                                setSelectedDupeProduct(product);
                                             }}
                                             className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
                                         >
@@ -238,14 +234,15 @@ export default function ExpensiveProductsTable() {
                     onClose={() => setSelectedProduct(null)}
                 />
             )}
-            {isDupeFoundsOpen && (
+        
+            {selectedDupeProduct && (
                 <DupeFoundsModal
-                    onClose={() => setIsDupeFoundsOpen(false)}
-                    productName={selectedProductName ?? "Product"}
-                    dupeNames={dupeFoundsList}
+                    onClose={() => setSelectedDupeProduct(null)}
+                    productName={selectedDupeProduct.product_name}
+                    expensiveProductId={selectedDupeProduct.id}  // ✅ real id
                 />
             )}
-         
+
             {isAddDupeOpen ? <AddDupeEntry onClose={() => setIsAddDupeOpen(false)} /> : null}
         </div>
     );
