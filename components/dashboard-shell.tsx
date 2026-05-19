@@ -14,13 +14,14 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
+
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import RequireAuth from "./RequireAuth/RequireAuth"
+import { getUserProfile } from "@/apis/authApis"
 
 type DashboardShellProps = {
   section: string
@@ -28,6 +29,8 @@ type DashboardShellProps = {
 }
 
 export function DashboardShell({ section, children }: DashboardShellProps) {
+  const {userProfileData } = getUserProfile();
+  console.log("userProfileData:", userProfileData);
   const pathname = usePathname()
 
   const routeSegment = pathname
@@ -65,12 +68,12 @@ export function DashboardShell({ section, children }: DashboardShellProps) {
             <div className="ml-auto flex items-center px-4">
               <div className="flex items-center gap-3">
                 <div className="text-right">
-                  <p className="text-md leading-tight font-semibold text-slate-700">Alex Johnson</p>
-                  <p className="text-sm leading-tight font-normal text-slate-500">Super admin</p>
+                  <p className="text-md leading-tight font-semibold text-slate-700">{userProfileData?.full_name || "Admin"}</p>
+                  <p className="text-sm leading-tight font-normal text-slate-500">{userProfileData?.email || ""}</p>
                 </div>
                 <Image
-                  src={image}
-                  alt="Alex Johnson"
+                  src={userProfileData?.profile_image || image}
+                  alt={userProfileData?.full_name || "Admin"}
                   width={480}
                   height={480}
                   className="size-16 shrink-0 rounded-full object-cover"
