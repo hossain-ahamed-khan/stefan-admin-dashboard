@@ -41,6 +41,7 @@ export default function ProductTable() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Products | null>(null);
 
+
   const { data, isLoading } = useGetProducts({
     page: currentPage,
     page_size: PAGE_SIZE,
@@ -190,6 +191,7 @@ export default function ProductTable() {
                 <tr key={product.id} className="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 text-sm text-gray-600">{product.barcode}</td>
                   <td className="px-6 py-4 text-sm text-gray-600">{product.product_name}</td>
+                  
                   <td className="px-6 py-4 text-sm text-gray-600">{product.brand}</td>
                   <td className="px-6 py-4"><SourceBadge source={product.source} /></td>
                   <td className="px-6 py-4"><VerifiedBadge status={product.is_verified} /></td>

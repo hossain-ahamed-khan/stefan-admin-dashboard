@@ -30,7 +30,7 @@ type DashboardShellProps = {
 
 export function DashboardShell({ section, children }: DashboardShellProps) {
   const {userProfileData } = getUserProfile();
-  console.log("userProfileData:", userProfileData);
+  // console.log("userProfileData:", userProfileData);
   const pathname = usePathname()
 
   const routeSegment = pathname

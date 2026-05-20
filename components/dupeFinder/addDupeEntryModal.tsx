@@ -3,11 +3,14 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import { useCreateDupeProduct } from "@/apis/hooks/useDupeProducts";
 import { useGetExpensiveProducts } from "@/apis/hooks/useExpensiveProducts";
+import { ExpensiveProduct } from "@/apis/dupeProductApis";
 
-interface AddDupeEntryProps { onClose: () => void; }
+interface AddDupeEntryProps {
+    onClose: () => void;
+    expensiveProduct: ExpensiveProduct;
+}
 
-export default function AddDupeEntry({ onClose }: AddDupeEntryProps) {
-    const [expensiveProductId, setExpensiveProductId] = useState("");
+export default function AddDupeEntry({ onClose, expensiveProduct }: AddDupeEntryProps) {
     const [brand, setBrand] = useState("");
     const [productName, setProductName] = useState("");
     const [price, setPrice] = useState("");
@@ -16,10 +19,9 @@ export default function AddDupeEntry({ onClose }: AddDupeEntryProps) {
     const [whyItWorks, setWhyItWorks] = useState("");
     const [awinUrl, setAwinUrl] = useState("");
 
-    const { data, isLoading } = useGetExpensiveProducts();
+    // const { data, isLoading } = useGetExpensiveProducts();
     const { mutate: createProduct, isPending } = useCreateDupeProduct();
 
-    const selectedProduct = data?.results?.find((p) => String(p.id) === expensiveProductId);
 
     const handleSave = () => {
         // URL validation helper
@@ -32,7 +34,7 @@ export default function AddDupeEntry({ onClose }: AddDupeEntryProps) {
             }
         };
 
-        if (!expensiveProductId || !brand.trim() || !productName.trim() || !price.trim() || !whyItWorks.trim()) {
+        if (!expensiveProduct?.id || !brand.trim() || !productName.trim() || !price.trim() || !whyItWorks.trim()) {
             // ✅ removed awinUrl from required check
             Swal.fire({
                 title: "Missing fields",
@@ -58,7 +60,7 @@ export default function AddDupeEntry({ onClose }: AddDupeEntryProps) {
 
         createProduct(
             {
-                expensive_product: Number(expensiveProductId),
+                expensive_product: expensiveProduct.id,
                 brand,
                 product_name: productName,
                 price,
@@ -103,9 +105,6 @@ export default function AddDupeEntry({ onClose }: AddDupeEntryProps) {
                         ✕
                     </button>
                     <h2 className="text-xl font-semibold text-gray-900">Add Dupe Entry</h2>
-                    <p className="text-sm text-gray-400 mt-0.5">
-                        {selectedProduct ? `Linked to: ${selectedProduct.product_name}` : "Select a product to link"}
-                    </p>
                 </div>
 
                 {/* Body */}
@@ -115,22 +114,12 @@ export default function AddDupeEntry({ onClose }: AddDupeEntryProps) {
 
                         {/* Select Expensive Product */}
                         <div className="mb-4">
-                            <label className="block text-sm text-gray-600 mb-1.5">Product <span className="text-red-500">*</span></label>
-                            <div className="relative">
-                                <select value={expensiveProductId} onChange={(e) => setExpensiveProductId(e.target.value)}
-                                    className="cursor-pointer w-full border border-gray-200 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 appearance-none focus:outline-none focus:ring-2 focus:ring-green-700/30 focus:border-green-700 transition bg-white">
-                                    <option value="">Select Product</option>
-                                    {isLoading ? (
-                                        <option disabled>Loading...</option>
-                                    ) : (
-                                        data?.results?.map((product) => (
-                                            <option key={product.id} value={product.id}>
-                                                {product.brand} — {product.product_name}
-                                            </option>
-                                        ))
-                                    )}
-                                </select>
-                                <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs">▼</span>
+                            <label className="block text-sm text-gray-600 mb-1.5">
+                               Add Dupe entry under this Expensive product
+                            </label>
+
+                            <div className="w-full border border-gray-200 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 bg-gray-50">
+                                {expensiveProduct.brand} — {expensiveProduct.product_name}
                             </div>
                         </div>
 

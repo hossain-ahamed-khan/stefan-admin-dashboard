@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createDupeProduct, CreateDupeProducts, deleteDupeProduct, getDupeProduct, GetDupeProductsParams, UpdateDupeProduct, updateDupeProduct } from "../dupeProductApis";
+import { PRODUCT_KEYS as EXPENSIVE_KEYS } from "./useExpensiveProducts";
 
 export const PRODUCT_KEYS = {
   all: ["dupeProducts"] as const,
@@ -19,6 +20,7 @@ export const useCreateDupeProduct = () => {
     mutationFn: (body: CreateDupeProducts) => createDupeProduct(body),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: PRODUCT_KEYS.all });
+       queryClient.invalidateQueries({ queryKey: EXPENSIVE_KEYS.all });
     },
   });
 };
@@ -30,6 +32,7 @@ export const useUpdateDupeProduct = () => {
       updateDupeProduct(id, body),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: PRODUCT_KEYS.all });
+      queryClient.invalidateQueries({ queryKey: EXPENSIVE_KEYS.all });
     },
   });
 };
@@ -40,6 +43,7 @@ export const useDeleteDupeProduct = () => {
     mutationFn: (id: number) => deleteDupeProduct(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: PRODUCT_KEYS.all });
+      queryClient.invalidateQueries({ queryKey: EXPENSIVE_KEYS.all });
     },
   });
 };

@@ -44,13 +44,23 @@ export default function UserTable() {
     const [page, setPage] = useState(1);
     const [planOpen, setPlanOpen] = useState(false);
     const [influencerOpen, setInfluencerOpen] = useState(false);
+    const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
+
+    const toggleRow = (id: number) => {
+        setExpandedRows((prev) => {
+            const next = new Set(prev);
+            next.has(id) ? next.delete(id) : next.add(id);
+            return next;
+        });
+    };
+
 
     // API — search & page sent to backend directly
     const { data, isLoading } = useGetUsers({
         page,
         page_size: PAGE_SIZE,
         search: search || undefined,
-        ordering : order,
+        ordering: order,
     });
 
     const { mutate: deleteUser, isPending: isDeleting } = useDeleteUser();
@@ -160,15 +170,30 @@ export default function UserTable() {
                                 <tr key={user.id} className="font-medium border-b last:border-b-0 hover:bg-gray-50 transition-colors" style={{ borderColor: "#f0ece5" }}>
                                     <td className="px-6 py-4" style={{ color: "#444" }}>{user.email}</td>
 
+                                    {/* Inside your JSX table row: */}
                                     <td className="px-6 py-4">
-                                        {user.skin_type ? (
-                                            <span className="px-3 py-1 rounded-full text-white text-xs font-medium" style={{ backgroundColor: "#5bc4a0" }}>
-                                                {user.skin_type}
-                                            </span>
+                                        {Array.isArray(user.skin_type) && user.skin_type.length > 0 ? (
+                                            <div className="flex flex-wrap gap-2 items-start" style={{ maxWidth: "220px" }}>
+                                                {(expandedRows.has(user.id) ? user.skin_type : user.skin_type.slice(0, 2)).map((active) => (
+                                                    <span key={active} className="bg-[#74C69D] text-white text-xs px-3 py-1 rounded-full">
+                                                        {active}
+                                                    </span>
+                                                ))}
+
+                                                {user.skin_type.length > 2 && (
+                                                    <button
+                                                        onClick={() => toggleRow(user.id)}
+                                                        className="text-gray-500 text-xs font-bold hover:text-gray-700 focus:outline-none cursor-pointer"
+                                                    >
+                                                        {expandedRows.has(user.id) ? 'Show less' : 'More...'}
+                                                    </button>
+                                                )}
+                                            </div>
                                         ) : (
                                             <span className="text-gray-400 text-xs">—</span>
                                         )}
                                     </td>
+
 
                                     <td className="px-6 py-4" style={{ color: "#444" }}>{user.analysis_monthly}</td>
 

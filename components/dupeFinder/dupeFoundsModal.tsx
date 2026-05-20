@@ -77,7 +77,7 @@ export default function DupeFoundsModal({ onClose, productName = "Product", expe
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4" onClick={onClose}>
-      <div className="w-full max-w-2xl rounded-3xl bg-[#faf8f5] shadow-2xl" onClick={(e) => e.stopPropagation()}>
+      <div className="w-full max-w-xl rounded-3xl bg-[#faf8f5] shadow-2xl" onClick={(e) => e.stopPropagation()}>
 
         {/* Header */}
         <div className="relative px-8 pt-7 pb-5">
@@ -105,18 +105,19 @@ export default function DupeFoundsModal({ onClose, productName = "Product", expe
           ) : (
             dupes.map((dupe) => (
               <div key={dupe.id} className="space-y-1">
-                <label className="text-sm font-semibold text-[#2b2b2b]">
-                  {dupe.brand} — {dupe.product_name}
-                </label>
+                {/* <label className="text-sm font-semibold text-[#2b2b2b]">
+                  {dupe.brand}
+                </label> */}
                 <div className="flex items-center gap-3">
                   <div className="flex-1 rounded-2xl border border-[#e6e1da] bg-white px-4 py-3 text-sm text-[#6b7280]">
-                    <span className="font-medium">{dupe.price}</span>
+                    <span className="font-medium">{dupe.product_name}</span>
+                    {/* <span className="font-medium">{dupe.price}</span>
                     <span className="mx-2 text-gray-300">·</span>
                     <span>{dupe.retailer}</span>
                     <span className="mx-2 text-gray-300">·</span>
                     <span className={dupe.make_verified ? "text-green-600" : "text-yellow-600"}>
                       {dupe.make_verified ? "Verified" : "Pending"}
-                    </span>
+                    </span> */}
                   </div>
                   <button
                     onClick={() => setSelectedEntry(dupe)}

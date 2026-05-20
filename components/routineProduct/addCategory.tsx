@@ -51,7 +51,7 @@ export default function AddCategory() {
     return (
         <div className="mb-4">
             <label className="block text-sm text-gray-600 mb-1.5">
-                Add Category <span className="text-red-500">*</span>
+                Add Category <span className="text-red-500">(Optional)</span>
             </label>
 
             <div className="flex items-center gap-3">
