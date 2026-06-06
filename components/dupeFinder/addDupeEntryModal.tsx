@@ -2,7 +2,6 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { useCreateDupeProduct } from "@/apis/hooks/useDupeProducts";
-import { useGetExpensiveProducts } from "@/apis/hooks/useExpensiveProducts";
 import { ExpensiveProduct } from "@/apis/dupeProductApis";
 
 interface AddDupeEntryProps {
@@ -19,9 +18,7 @@ export default function AddDupeEntry({ onClose, expensiveProduct }: AddDupeEntry
     const [whyItWorks, setWhyItWorks] = useState("");
     const [awinUrl, setAwinUrl] = useState("");
 
-    // const { data, isLoading } = useGetExpensiveProducts();
     const { mutate: createProduct, isPending } = useCreateDupeProduct();
-
 
     const handleSave = () => {
         // URL validation helper
@@ -104,24 +101,24 @@ export default function AddDupeEntry({ onClose, expensiveProduct }: AddDupeEntry
                         className="cursor-pointer absolute top-5 right-5 flex h-7 w-7 items-center justify-center rounded-full bg-gray-900 text-sm text-white transition-colors hover:bg-gray-700">
                         ✕
                     </button>
-                    <h2 className="text-xl font-semibold text-gray-900">Add Dupe Entry</h2>
+                    <h2 className="text-xl font-bold text-gray-900">Add Dupe Entry</h2>
                 </div>
 
                 {/* Body */}
                 <div className="px-8 py-6 space-y-6">
                     <section>
-                        <h3 className="text-sm font-semibold text-gray-800 mb-4">Dupe Product Details</h3>
+                        <h3 className="text-base font-semibold text-gray-800 mb-4"> Add Dupe entry under this Expensive product</h3>
 
                         {/* Select Expensive Product */}
-                        <div className="mb-4">
+                         {/*<div className="mb-4">
                             <label className="block text-sm text-gray-600 mb-1.5">
-                               Add Dupe entry under this Expensive product
+                              
                             </label>
 
                             <div className="w-full border border-gray-200 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 bg-gray-50">
                                 {expensiveProduct.brand} — {expensiveProduct.product_name}
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Brand + Product name */}
                         <div className="grid grid-cols-2 gap-4 mb-4">

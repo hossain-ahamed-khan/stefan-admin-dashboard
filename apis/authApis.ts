@@ -78,3 +78,14 @@ export const getUserProfile = () => {
   });
   return { userProfileData, isLoading, isError, error, refetch };
 }
+
+export const userProfileResetNewPassword = async (resetPassword: { old_password : string, new_password : string, confirm_new_password : string}) => {
+  try {
+    const response = await axiosApiInstance.post("/user/profile/change-password/", resetPassword);
+    return response.data;
+  }
+  catch (error: any) {
+    throw error.response?.data || error;
+  }
+};
+
