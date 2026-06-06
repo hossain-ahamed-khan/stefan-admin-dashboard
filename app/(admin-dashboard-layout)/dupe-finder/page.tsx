@@ -8,8 +8,9 @@ import DupeFoundsModal from "@/components/dupeFinder/dupeFoundsModal";
 import { useGetExpensiveProducts, useDeleteExpensiveProduct } from "@/apis/hooks/useExpensiveProducts";
 import { ExpensiveProduct } from "@/apis/expensiveProductApis";
 import AddDupeEntry from "@/components/dupeFinder/addDupeEntryModal";
+import UploadDupeProductBulkModal from "@/components/dupeFinder/uploadDupeProductBulkModal";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 40;
 
 const EditIcon = () => (
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -28,6 +29,7 @@ export default function ExpensiveProductsTable() {
     const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [isAddProductOpen, setIsAddProductOpen] = useState(false);
+    const [isUploadDupeBulkProductOpen, setUploadDupeBulkProductOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<ExpensiveProduct | null>(null);
     const [isAddDupeOpen, setIsAddDupeOpen] = useState(false);
     const [selectedDupeProduct, setSelectedDupeProduct] = useState<ExpensiveProduct | null>(null);
@@ -48,7 +50,9 @@ export default function ExpensiveProductsTable() {
         search: search || undefined,
     });
 
+   
     const { mutate: deleteProduct, isPending: isDeleting } = useDeleteExpensiveProduct();
+    
 
     const totalPages = data ? Math.ceil(data.count / PAGE_SIZE) : 1;
 
@@ -123,19 +127,29 @@ export default function ExpensiveProductsTable() {
                             onChange={(e) => handleSearchChange(e.target.value)}
                             className="bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm text-gray-600 placeholder-gray-400 w-64 focus:outline-none focus:ring-1 focus:ring-[#4a9e5c]"
                         />
-                        <button
-                            onClick={() => setIsAddProductOpen(true)}
-                            className="bg-[#2D6A4F] text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-[#234820] transition-colors cursor-pointer"
-                        >
-                            + Add expensive product
-                        </button>
+
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={() => setUploadDupeBulkProductOpen(true)}
+                                className="bg-[#2D6A4F] text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-[#234820] transition-colors cursor-pointer"
+                            >
+                                + Upload Dupe product file
+                            </button>
+                            <button
+                                onClick={() => setIsAddProductOpen(true)}
+                                className="bg-[#2D6A4F] text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-[#234820] transition-colors cursor-pointer"
+                            >
+                                + Add expensive product
+                            </button>
+                        </div>
                     </div>
 
                     {/* Table */}
                     <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
                         {/* Header */}
-                        <div className="grid grid-cols-[1.5fr_2.5fr_1fr_2fr_1.5fr_1.5fr] px-6 py-4 border-b border-gray-100">
-                            {["Brand", "Product", "Price", "Key Actives", "Dupes", "Actions"].map((h) => (
+                        <div className="grid grid-cols-[1fr_1.5fr_2.5fr_1fr_2fr_1.5fr_1.5fr] px-6 py-4 border-b border-gray-100">
+                            
+                            {["ID", "Brand", "Product", "Price", "Key Actives", "Dupes", "Actions"].map((h) => (
                                 <span key={h} className="text-sm font-semibold text-gray-700">{h}</span>
                             ))}
                         </div>
@@ -150,10 +164,13 @@ export default function ExpensiveProductsTable() {
                             <div className="px-6 py-10 text-center text-sm text-gray-400">No products found.</div>
                         ) : (
                             data?.results.map((product, idx) => (
+                                // data?.results || [].sort((a, b) => a.id - b.id).map((product, idx) => (
+                                
                                 <div
                                     key={product.id}
-                                    className={`grid grid-cols-[1.5fr_2.5fr_1fr_2fr_1.5fr_1.5fr] px-6 py-1 items-center ${idx !== (data.results.length - 1) ? "border-b border-gray-100" : ""}`}
-                                >
+                                    className={`grid grid-cols-[1fr_1.5fr_2.5fr_1fr_2fr_1.5fr_1.5fr] px-6 py-1 items-center ${idx !== (data.results.length - 1) ? "border-b border-gray-100" : ""}`}>
+                                    
+                                    <span className="text-sm text-gray-600">{product.id}</span>
                                     <span className="text-sm text-gray-600">{product.brand}</span>
                                     <span className="text-sm text-gray-600">{product.product_name}</span>
                                     <span className="text-sm text-gray-600">{product.price}</span>
@@ -169,18 +186,29 @@ export default function ExpensiveProductsTable() {
 
                                     <div className="px-6 py-4">
                                         {(() => {
-                                            const ingredients = product.key_active_ingredients
-                                                .split(",")
-                                                .map((i) => i.trim())
-                                                .filter(Boolean);
+                                            const ingredients =
+                                                typeof product.key_active_ingredients === "string"
+                                                    ? product.key_active_ingredients
+                                                        .split(",")
+                                                        .map((i) => i.trim())
+                                                        .filter(Boolean)
+                                                    : Array.isArray(product.key_active_ingredients)
+                                                        ? product.key_active_ingredients
+                                                        : [];
 
                                             const isExpanded = expandedRows.has(product.id);
                                             const visible = isExpanded ? ingredients : ingredients.slice(0, 2);
 
                                             return (
-                                                <div className="flex flex-wrap gap-2 items-center" style={{ maxWidth: "260px" }}>
-                                                    {visible.map((active) => (
-                                                        <span key={active} className="bg-[#74C69D] text-white text-xs px-3 py-1 rounded-full">
+                                                <div
+                                                    className="flex flex-wrap gap-2 items-center"
+                                                    style={{ maxWidth: "260px" }}
+                                                >
+                                                    {visible.map((active, index) => (
+                                                        <span
+                                                            key={`${active}-${index}`}
+                                                            className="bg-[#74C69D] text-white text-xs px-3 py-1 rounded-full"
+                                                        >
                                                             {active}
                                                         </span>
                                                     ))}
@@ -277,6 +305,10 @@ export default function ExpensiveProductsTable() {
             {/* Modals */}
             {isAddProductOpen && (
                 <AddExpensiveProduct onClose={() => setIsAddProductOpen(false)} />
+            )}
+
+            {isUploadDupeBulkProductOpen && (
+                <UploadDupeProductBulkModal onClose={() => setUploadDupeBulkProductOpen(false)} />
             )}
 
             {selectedProduct && (

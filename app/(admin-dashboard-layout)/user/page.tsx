@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useGetUsers, useDeleteUser } from "@/apis/userApis";
 import Swal from "sweetalert2";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 8;
 const PLAN_OPTIONS = ["All plans", "Free", "Basic", "Premium"];
 const INFLUENCER_OPTIONS = ["All", "Influencer", "No influencer"];
 const TABLE_HEADERS = ["Email", "Skin Type", "Analyses / Month", "Plan", "Influencer", "Joined", "Actions"];

@@ -67,7 +67,22 @@ export const getExpensiveProduct = async (params: GetExpensiveProductsParams): P
 
 export const createExpensiveProduct = async (body: CreateExpensiveProduct): Promise<CreateExpensiveProductResponse> => {
     const { data } = await axiosApiInstance.post("/dashboard/expensive-products/", body);
-    return data; 
+    return data;
+};
+
+
+export const uploadDupeProductBulkFile = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const { data } = await axiosApiInstance.post("/dashboard/dupe-products/bulk/", formData,
+        {
+            headers: {
+                "Content-Type": undefined,
+            },
+        }
+    );
+    return data;
 };
 
 export const updateExpensiveProduct = async (id: number, body: UpdateExpensiveProduct) => {

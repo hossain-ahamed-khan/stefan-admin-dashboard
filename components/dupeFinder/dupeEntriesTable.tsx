@@ -5,7 +5,7 @@ import UpdateDupeEntry from "./updateDupeModal";
 import { useGetDupeProducts, useDeleteDupeProduct } from "@/apis/hooks/useDupeProducts";
 import { DupeProduct } from "@/apis/dupeProductApis";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 30;
 
 const EditIcon = () => (
   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

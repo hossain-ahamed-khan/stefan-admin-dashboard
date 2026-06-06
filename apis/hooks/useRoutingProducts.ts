@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createRoutingProduct, CreateRoutingProductPayload, deleteRoutingProduct, getRoutingProducts, GetRoutingProductsParams, updateRoutingProduct, UpdateRoutingProductBody } from "../routingProductsApis";
+import { createRoutingProduct, CreateRoutingProductPayload, deleteRoutingProduct, getRoutingProducts, GetRoutingProductsParams, updateRoutingProduct, UpdateRoutingProductBody, uploadRoutingProductFile } from "../routingProductsApis";
 
 
 // ─── Query Keys ──────────────────────────────────────────────────────────────
@@ -26,6 +26,19 @@ export const useCreateRoutingProduct = () => {
       queryClient.invalidateQueries({ queryKey: PRODUCT_KEYS.all });
     },
   });
+};
+
+export const useUploadRoutingProductFile = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (file: File) => uploadRoutingProductFile(file),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: PRODUCT_KEYS.all,
+            });
+        },
+    });
 };
 
 export const useUpdateRoutingProduct = () => {

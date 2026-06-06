@@ -5,8 +5,9 @@ import AddRoutineProduct from "@/components/routineProduct/addRoutineProductModa
 import { useGetRoutingProducts, useDeleteRoutingProduct } from "@/apis/hooks/useRoutingProducts";
 import { SkincareProduct } from "@/apis/routingProductsApis";
 import UpdateRoutineProduct from "@/components/routineProduct/updateRoutingProduct";
+import UploadRoutingProduct from "@/components/routineProduct/uploadRoutingProductModal";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 20;
 
 const EditIcon = () => (
   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -25,6 +26,7 @@ export default function RoutineProductsTable() {
   const [slot, setSlot] = useState("");
   const [page, setPage] = useState(1);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isUploadRoutingProductOpen, setUploadRoutingProductOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<SkincareProduct | null>(null);
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
 
@@ -39,6 +41,7 @@ export default function RoutineProductsTable() {
   const { data, isLoading } = useGetRoutingProducts({
     page,
     search: search || undefined,
+    page_size: PAGE_SIZE,
     routine_slot: slot || undefined,
   });
 
@@ -123,13 +126,21 @@ export default function RoutineProductsTable() {
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setIsAddModalOpen(true)}
-          className="rounded-lg bg-[#2D6A4F] px-5 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-emerald-800"
-        >
-          + Add product
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setUploadRoutingProductOpen(true)}
+            className="bg-[#2D6A4F] text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-[#234820] transition-colors cursor-pointer"
+          >
+            + Upload Routing product file
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsAddModalOpen(true)}
+            className="cursor-pointer rounded-lg bg-[#2D6A4F] px-5 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-emerald-800"
+          >
+            + Add product
+          </button>
+        </div>
       </div>
 
       {/* Table */}
@@ -137,7 +148,7 @@ export default function RoutineProductsTable() {
         <table className="w-full text-sm text-stone-700">
           <thead>
             <tr className="border-b border-stone-100">
-              {["Brand", "Product", "Category", "Slot", "Skin Types", "Price", "Priority", "Verified", "Actions"].map((col) => (
+              {["ID", "Product", "Category", "Slot", "Skin Types", "Price", "Priority", "Verified", "Actions"].map((col) => (
                 <th key={col} className="py-4 px-6 text-center font-semibold text-stone-800">{col}</th>
               ))}
             </tr>
@@ -159,6 +170,7 @@ export default function RoutineProductsTable() {
             ) : (
               data?.results.map((product) => (
                 <tr key={product.product_id} className="border-b border-stone-50 last:border-0 transition-colors hover:bg-stone-50">
+                  <td className="py-4 px-6 text-center">{product.product_id}</td>
                   <td className="py-4 px-6 text-center">{product.brand}</td>
                   <td className="py-4 px-6 text-center">{product.product_name}</td>
                   <td className="py-4 px-6 text-center">
@@ -168,45 +180,48 @@ export default function RoutineProductsTable() {
                   </td>
                   <td className="py-4 px-6 text-center capitalize">{product.routine_slot}</td>
                   <td className="py-4 px-6 text-center flex items-center justify-center gap-1">
-                      {/* {product.suitable_skin_types.split(",").map((st) => (
+                    {/* {product.suitable_skin_types.split(",").map((st) => (
                         <span key={st} className="inline-block rounded-full px-3 py-1 text-xs font-medium bg-[#74C69D] text-white">
                           {st.trim()}
                         </span>
                       ))} */}
 
-                      <div>
-                        {(() => {
-                          const ingredients = product.suitable_skin_types
-                            .split(",")
-                            .map((i) => i.trim())
-                            .filter(Boolean);
+                    <div>
+                      {(() => {
+                        const ingredients = typeof product.suitable_skin_types === "string" ? product.suitable_skin_types
+                          .split(",")
+                          .map((i) => i.trim())
+                          .filter(Boolean)
+                          : Array.isArray(product.suitable_skin_types)
+                            ? product.suitable_skin_types
+                            : [];
+              
+                        const productId = product.product_id;
+                        const isExpanded = typeof productId === "number" && expandedRows.has(productId);
+                        const visible = isExpanded ? ingredients : ingredients.slice(0, 2);
 
-                          const productId = product.product_id;
-                          const isExpanded = typeof productId === "number" && expandedRows.has(productId);
-                          const visible = isExpanded ? ingredients : ingredients.slice(0, 2);
+                        return (
+                          <div className="flex items-center justify-center gap-1 flex-wrap" style={{ maxWidth: "260px" }}>
+                            {visible.map((active) => (
+                              <span key={active} className="bg-[#74C69D] text-white text-xs px-3 py-1 rounded-full">
+                                {active}
+                              </span>
+                            ))}
 
-                          return (
-                            <div className="flex items-center justify-center gap-1 flex-wrap" style={{ maxWidth: "260px" }}>
-                              {visible.map((active) => (
-                                <span key={active} className="bg-[#74C69D] text-white text-xs px-3 py-1 rounded-full">
-                                  {active}
-                                </span>
-                              ))}
-
-                              {ingredients.length > 2 && (
-                                <button
-                                  onClick={() => {
-                                    if (typeof productId === "number") toggleRow(productId);
-                                  }}
-                                  className="text-gray-500 text-xs font-bold hover:text-gray-700 focus:outline-none cursor-pointer"
-                                >
-                                  {isExpanded ? "Show less" : "More..."}
-                                </button>
-                              )}
-                            </div>
-                          );
-                        })()}
-                      </div>
+                            {ingredients.length > 2 && (
+                              <button
+                                onClick={() => {
+                                  if (typeof productId === "number") toggleRow(productId);
+                                }}
+                                className="text-gray-500 text-xs font-bold hover:text-gray-700 focus:outline-none cursor-pointer"
+                              >
+                                {isExpanded ? "Show less" : "More..."}
+                              </button>
+                            )}
+                          </div>
+                        );
+                      })()}
+                    </div>
                   </td>
                   <td className="py-4 px-6 text-center">{product.price}</td>
                   <td className="py-4 px-6 text-center">{product.priority_score}</td>
@@ -261,6 +276,11 @@ export default function RoutineProductsTable() {
       {isAddModalOpen && (
         <AddRoutineProduct onClose={() => setIsAddModalOpen(false)} />
       )}
+
+      {isUploadRoutingProductOpen && (
+        <UploadRoutingProduct onClose={() => setUploadRoutingProductOpen(false)} />
+      )}
+
       {selectedProduct && (
         <UpdateRoutineProduct
           product={selectedProduct}

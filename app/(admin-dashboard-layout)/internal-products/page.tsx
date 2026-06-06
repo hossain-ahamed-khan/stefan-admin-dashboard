@@ -7,7 +7,7 @@ import { useDeleteProduct, useGetProducts } from "@/apis/hooks/useInternalProduc
 import { Products } from "@/apis/internalProductApis";
 
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 8;
 
 const SourceBadge = ({ source }: { source: string }) => (
   <span className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-[#CDBDFF] text-[#8A63FF]">

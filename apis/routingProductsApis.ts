@@ -30,6 +30,7 @@ export interface PaginatedRoutingProductsResponse {
 export interface GetRoutingProductsParams {
   page?: number;
   search?: string;
+  page_size?: number;
   routine_slot?: string;
 }
 
@@ -54,6 +55,7 @@ export const getRoutingProducts = async (params: GetRoutingProductsParams): Prom
     params: {
       page: params.page,
       search: params.search || undefined,
+      page_size: params.page_size,
       routine_slot: params.routine_slot || undefined,
     },
   });
@@ -63,6 +65,20 @@ export const getRoutingProducts = async (params: GetRoutingProductsParams): Prom
 export const createRoutingProduct = async ( body: CreateRoutingProductPayload ): Promise<SkincareProduct> => {
   const { data } = await axiosApiInstance.post("/dashboard/routine-products/", body );
   return data;
+};
+
+export const uploadRoutingProductFile = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const { data } = await axiosApiInstance.post("/dashboard/routine-product/bulk/",formData,
+      {
+            headers: {
+                "Content-Type": undefined,
+            },
+        }
+    );
+    return data;
 };
 
 export const updateRoutingProduct = async ( id: number, body: UpdateRoutingProductBody): Promise<SkincareProduct> => {
