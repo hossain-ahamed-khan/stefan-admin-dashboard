@@ -5,8 +5,8 @@ export interface ExpensiveProduct {
     brand: string;
     product_name: string;
     price: string;
-    search_terms: string;
-    key_active_ingredients: string;
+    search_terms: string | string[];
+    key_active_ingredients: string | string[]; 
     dupe_products: number;
     is_active: boolean;
     created_at: string;
@@ -42,8 +42,8 @@ export interface CreateExpensiveProductResponse {
         brand: string;
         product_name: string;
         price: string;
-        search_terms: string;
-        key_active_ingredients: string;
+        search_terms: string | string[]; // ✅ handle both
+        key_active_ingredients: string | string[]; // ✅ handle both
         dupe_products: number;
         is_active: boolean;
         created_at: string;
@@ -62,6 +62,7 @@ export const getExpensiveProduct = async (params: GetExpensiveProductsParams): P
             search: params.search || undefined,
         },
     });
+    console.log("expensive product raw response:", data);
     return data;
 };
 

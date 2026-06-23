@@ -36,6 +36,7 @@ export interface GetDupeProductsParams {
     page_size?: number;
     ordering?: string;
     search?: string;
+    expensive_product?: number;
 }
 
 export interface CreateDupeProducts {
@@ -75,6 +76,7 @@ export const getDupeProduct = async (params : GetDupeProductsParams): Promise<Du
             page_size: params.page_size,
             ordering: params.ordering,
             search: params.search || undefined,
+            expensive_product: params.expensive_product || undefined,
         },
     });
     return data;

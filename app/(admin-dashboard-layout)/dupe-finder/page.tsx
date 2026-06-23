@@ -50,9 +50,14 @@ export default function ExpensiveProductsTable() {
         search: search || undefined,
     });
 
-   
+    console.log("products:", data?.results.map(p => ({
+        id: p.id,
+        name: p.product_name,
+        dupes: p.dupe_products
+    })));
+
     const { mutate: deleteProduct, isPending: isDeleting } = useDeleteExpensiveProduct();
-    
+
 
     const totalPages = data ? Math.ceil(data.count / PAGE_SIZE) : 1;
 
@@ -148,7 +153,7 @@ export default function ExpensiveProductsTable() {
                     <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
                         {/* Header */}
                         <div className="grid grid-cols-[1fr_1.5fr_2.5fr_1fr_2fr_1.5fr_1.5fr] px-6 py-4 border-b border-gray-100">
-                            
+
                             {["ID", "Brand", "Product", "Price", "Key Actives", "Dupes", "Actions"].map((h) => (
                                 <span key={h} className="text-sm font-semibold text-gray-700">{h}</span>
                             ))}
@@ -164,26 +169,16 @@ export default function ExpensiveProductsTable() {
                             <div className="px-6 py-10 text-center text-sm text-gray-400">No products found.</div>
                         ) : (
                             data?.results.map((product, idx) => (
-                                // data?.results || [].sort((a, b) => a.id - b.id).map((product, idx) => (
-                                
+
                                 <div
                                     key={product.id}
                                     className={`grid grid-cols-[1fr_1.5fr_2.5fr_1fr_2fr_1.5fr_1.5fr] px-6 py-1 items-center ${idx !== (data.results.length - 1) ? "border-b border-gray-100" : ""}`}>
-                                    
+
                                     <span className="text-sm text-gray-600">{product.id}</span>
                                     <span className="text-sm text-gray-600">{product.brand}</span>
                                     <span className="text-sm text-gray-600">{product.product_name}</span>
                                     <span className="text-sm text-gray-600">{product.price}</span>
-
                                     {/* Key Actives */}
-                                    {/* <div className="flex flex-wrap gap-2">
-                                        {product.key_active_ingredients.split(",").map((active) => (
-                                            <span key={active} className="bg-[#74C69D] text-white text-xs px-3 py-1 rounded-full">
-                                                {active.trim()}
-                                            </span>
-                                        ))}
-                                    </div> */}
-
                                     <div className="px-6 py-4">
                                         {(() => {
                                             const ingredients =
@@ -229,8 +224,9 @@ export default function ExpensiveProductsTable() {
                                     {/* Dupes */}
                                     <div className="flex items-center gap-2">
                                         <span className="bg-[#F0CE94] text-[#7A6000] text-xs px-3 py-1 rounded-full font-medium">
-                                            {product.dupe_products} dupes
+                                            {product?.dupe_products} dupes
                                         </span>
+                                        
                                         <button
                                             onClick={() => {
                                                 setSelectedDupeProduct(product);
@@ -322,7 +318,7 @@ export default function ExpensiveProductsTable() {
                 <DupeFoundsModal
                     onClose={() => setSelectedDupeProduct(null)}
                     productName={selectedDupeProduct.product_name}
-                    expensiveProductId={selectedDupeProduct.id}  // ✅ real id
+                    expensiveProductId={selectedDupeProduct.id}
                 />
             )}
 

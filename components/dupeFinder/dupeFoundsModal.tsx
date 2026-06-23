@@ -23,16 +23,21 @@ const TrashIcon = () => (
   </svg>
 );
 
-export default function DupeFoundsModal({ onClose, productName = "Product", expensiveProductId }: DupeFoundsModalProps) {
+export default function DupeFoundsModal({ onClose, productName, expensiveProductId }: DupeFoundsModalProps) {
   const [selectedEntry, setSelectedEntry] = useState<DupeProduct | null>(null);
 
-  const { data, isLoading } = useGetDupeProducts({ page: 1, page_size: 100 });
+  const { data, isLoading } = useGetDupeProducts({
+    page: 1,
+    page_size: 100,
+    expensive_product: expensiveProductId,
+  });
+
   const { mutate: deleteEntry, isPending: isDeleting } = useDeleteDupeProduct();
 
-  // Filter dupes that belong to this expensive product
-  const dupes = (data?.results ?? []).filter(
-    (d) => d.expensive_product?.id === expensiveProductId
-  );
+  const dupes = data?.results ?? [];
+  // add this temporarily in dupeFoundsModal
+  // console.log("raw data:", data?.results);
+  // console.log("expensiveProductId:", expensiveProductId);
 
   const handleDelete = async (id: number) => {
     const result = await Swal.fire({
@@ -82,7 +87,7 @@ export default function DupeFoundsModal({ onClose, productName = "Product", expe
         {/* Header */}
         <div className="relative px-8 pt-7 pb-5">
           <button onClick={onClose}
-            className="absolute right-6 top-6 flex h-8 w-8 items-center justify-center rounded-full bg-[#2b2b2b] text-white transition-colors hover:bg-[#1f1f1f]">
+            className="cursor-pointer absolute right-6 top-6 flex h-8 w-8 items-center justify-center rounded-full bg-[#2b2b2b] text-white transition-colors hover:bg-[#1f1f1f]">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
             </svg>
@@ -110,12 +115,13 @@ export default function DupeFoundsModal({ onClose, productName = "Product", expe
                 </label> */}
                 <div className="flex items-center gap-3">
                   <div className="flex-1 rounded-2xl border border-[#e6e1da] bg-white px-4 py-3 text-sm text-[#6b7280]">
-                    <span className="font-medium">{dupe.product_name}</span>
-                    {/* <span className="font-medium">{dupe.price}</span>
+                    <span className="font-medium">{dupe?.product_name}</span>
+                    <span className="mx-2 text-gray-300">·</span>
+                    <span className="font-medium">{dupe.price}</span>
                     <span className="mx-2 text-gray-300">·</span>
                     <span>{dupe.retailer}</span>
                     <span className="mx-2 text-gray-300">·</span>
-                    <span className={dupe.make_verified ? "text-green-600" : "text-yellow-600"}>
+                    {/* <span className={dupe.make_verified ? "text-green-600" : "text-yellow-600"}>
                       {dupe.make_verified ? "Verified" : "Pending"}
                     </span> */}
                   </div>
@@ -141,7 +147,7 @@ export default function DupeFoundsModal({ onClose, productName = "Product", expe
         {/* Footer */}
         <div className="px-8 pb-7 flex items-center justify-end gap-4">
           <button onClick={onClose}
-            className="min-w-33 rounded-xl border border-[#e6e1da] bg-white px-6 py-2.5 text-sm font-semibold text-[#6b7280] shadow-sm transition-colors hover:bg-[#f7f5f1]">
+            className="cursor-pointer min-w-33 rounded-xl border border-[#e6e1da] bg-white px-6 py-2.5 text-sm font-semibold text-[#6b7280] shadow-sm transition-colors hover:bg-[#f7f5f1]">
             Close
           </button>
         </div>

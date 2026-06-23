@@ -62,26 +62,26 @@ export const getRoutingProducts = async (params: GetRoutingProductsParams): Prom
   return data;
 };
 
-export const createRoutingProduct = async ( body: CreateRoutingProductPayload ): Promise<SkincareProduct> => {
-  const { data } = await axiosApiInstance.post("/dashboard/routine-products/", body );
+export const createRoutingProduct = async (body: CreateRoutingProductPayload): Promise<SkincareProduct> => {
+  const { data } = await axiosApiInstance.post("/dashboard/routine-products/", body);
   return data;
 };
 
 export const uploadRoutingProductFile = async (file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
+  const formData = new FormData();
+  formData.append("file", file);
 
-    const { data } = await axiosApiInstance.post("/dashboard/routine-product/bulk/",formData,
-      {
-            headers: {
-                "Content-Type": undefined,
-            },
-        }
-    );
-    return data;
+  const { data } = await axiosApiInstance.post("/dashboard/routine-product/bulk/", formData,
+    {
+      headers: {
+        "Content-Type": undefined,
+      },
+    }
+  );
+  return data;
 };
 
-export const updateRoutingProduct = async ( id: number, body: UpdateRoutingProductBody): Promise<SkincareProduct> => {
+export const updateRoutingProduct = async (id: number, body: UpdateRoutingProductBody): Promise<SkincareProduct> => {
   const { data } = await axiosApiInstance.patch(`/dashboard/routine-products/${id}/`, body);
   return data;
 };

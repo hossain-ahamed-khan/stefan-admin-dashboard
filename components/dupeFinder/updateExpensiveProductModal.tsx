@@ -11,8 +11,11 @@ interface Props {
   onClose: () => void;
 }
 
-const toTags = (str: string): Tag[] =>
-  str ? str.split(",").map((label, i) => ({ id: i, label: label.trim() })) : [];
+const toTags = (val: string | string[]): Tag[] => {
+  if (!val) return [];
+  const str = Array.isArray(val) ? val.join(", ") : val;
+  return str.split(",").map((label, i) => ({ id: i, label: label.trim() }));
+};
 
 export default function UpdateExpensiveProduct({ product, onClose }: Props) {
   const [brand, setBrand] = useState(product.brand);
@@ -41,14 +44,14 @@ export default function UpdateExpensiveProduct({ product, onClose }: Props) {
   };
 
   const handleSave = () => {
-    
+
     const finalSearchTerms = searchTags.length > 0
-            ? searchTags.map((t) => t.label).join(", ")
-            : searchInput.trim();
+      ? searchTags.map((t) => t.label).join(", ")
+      : searchInput.trim();
 
     const finalKeyActives = activeTags.length > 0
-            ? activeTags.map((t) => t.label).join(", ")
-            : activeInput.trim();
+      ? activeTags.map((t) => t.label).join(", ")
+      : activeInput.trim();
 
     if (!brand.trim() || !productName.trim() || !price.trim()) {
       Swal.fire({
@@ -69,13 +72,12 @@ export default function UpdateExpensiveProduct({ product, onClose }: Props) {
           product_name: productName,
           price,
           search_terms: finalSearchTerms,
-        //   search_terms: searchTags.map((t) => t.label).join(", "),
           key_active_ingredients: finalKeyActives,
         },
       },
       {
         onSuccess: (data) => {
-            //  console.log("onSuccess update data:", data);
+          //  console.log("onSuccess update data:", data);
           Swal.fire({
             title: "Updated!",
             text: "Product has been updated successfully.",
