@@ -3,12 +3,12 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import UpdateDupeEntry from "./updateDupeModal";
 import { DupeProduct } from "@/apis/dupeProductApis";
-import { useGetDupeProducts, useDeleteDupeProduct } from "@/apis/hooks/useDupeProducts";
+import { useDeleteDupeProduct, useGetDupeProductsByExpensiveProduct } from "@/apis/hooks/useDupeProducts";
 
 interface DupeFoundsModalProps {
   onClose: () => void;
   productName?: string;
-  expensiveProductId: number; // ✅ pass the id to fetch real dupes
+  expensiveProductId: number;
 }
 
 const EditIcon = () => (
@@ -26,18 +26,21 @@ const TrashIcon = () => (
 export default function DupeFoundsModal({ onClose, productName, expensiveProductId }: DupeFoundsModalProps) {
   const [selectedEntry, setSelectedEntry] = useState<DupeProduct | null>(null);
 
-  const { data, isLoading } = useGetDupeProducts({
-    page: 1,
-    page_size: 100,
-    expensive_product: expensiveProductId,
-  });
+  // const { data, isLoading } = useGetDupeProducts({
+  //   // page: 1,
+  //   // page_size: 40,
+  //   expensive_product: expensiveProductId,
+  // });
+
+  const { data, isLoading } = useGetDupeProductsByExpensiveProduct(expensiveProductId);
+  
 
   const { mutate: deleteEntry, isPending: isDeleting } = useDeleteDupeProduct();
 
-  const dupes = data?.results ?? [];
+  const dupes: DupeProduct[] = data?.results ?? [];
   // add this temporarily in dupeFoundsModal
-  // console.log("raw data:", data?.results);
-  // console.log("expensiveProductId:", expensiveProductId);
+  console.log("raw data:", data?.results);
+  console.log("expensiveProductId:", expensiveProductId);
 
   const handleDelete = async (id: number) => {
     const result = await Swal.fire({
@@ -116,11 +119,11 @@ export default function DupeFoundsModal({ onClose, productName, expensiveProduct
                 <div className="flex items-center gap-3">
                   <div className="flex-1 rounded-2xl border border-[#e6e1da] bg-white px-4 py-3 text-sm text-[#6b7280]">
                     <span className="font-medium">{dupe?.product_name}</span>
-                    <span className="mx-2 text-gray-300">·</span>
+                    {/* <span className="mx-2 text-gray-300">·</span>
                     <span className="font-medium">{dupe.price}</span>
                     <span className="mx-2 text-gray-300">·</span>
                     <span>{dupe.retailer}</span>
-                    <span className="mx-2 text-gray-300">·</span>
+                    <span className="mx-2 text-gray-300">·</span> */}
                     {/* <span className={dupe.make_verified ? "text-green-600" : "text-yellow-600"}>
                       {dupe.make_verified ? "Verified" : "Pending"}
                     </span> */}

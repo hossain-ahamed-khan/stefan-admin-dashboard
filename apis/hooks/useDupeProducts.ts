@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createDupeProduct, CreateDupeProducts, deleteDupeProduct, getDupeProduct, GetDupeProductsParams, UpdateDupeProduct, updateDupeProduct } from "../dupeProductApis";
+import { createDupeProduct, CreateDupeProducts, deleteDupeProduct, getDupeProduct, getDupeProductsByExpensiveProduct, GetDupeProductsParams, UpdateDupeProduct, updateDupeProduct } from "../dupeProductApis";
 import { PRODUCT_KEYS as EXPENSIVE_KEYS } from "./useExpensiveProducts";
 
 export const PRODUCT_KEYS = {
@@ -13,6 +13,16 @@ export const useGetDupeProducts = (params: GetDupeProductsParams = {}) => {
     queryFn: () => getDupeProduct(params),
   });
 };
+
+export const useGetDupeProductsByExpensiveProduct = (
+  expensive_product_id: number,
+  params: GetDupeProductsParams = {}
+) => {
+  return useQuery({
+    queryKey: ["dupeProducts", expensive_product_id, params],
+    queryFn: () => getDupeProductsByExpensiveProduct(expensive_product_id, params),
+  });
+}
 
 export const useCreateDupeProduct = () => {
   const queryClient = useQueryClient();

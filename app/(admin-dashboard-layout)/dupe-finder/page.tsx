@@ -31,8 +31,10 @@ export default function ExpensiveProductsTable() {
     const [isAddProductOpen, setIsAddProductOpen] = useState(false);
     const [isUploadDupeBulkProductOpen, setUploadDupeBulkProductOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<ExpensiveProduct | null>(null);
-    const [isAddDupeOpen, setIsAddDupeOpen] = useState(false);
-    const [selectedDupeProduct, setSelectedDupeProduct] = useState<ExpensiveProduct | null>(null);
+
+    // ✅ separate states for eye button and +Dupe button
+    const [viewDupeProduct, setViewDupeProduct] = useState<ExpensiveProduct | null>(null);
+    const [addDupeProduct, setAddDupeProduct] = useState<ExpensiveProduct | null>(null);
 
     const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
 
@@ -50,14 +52,7 @@ export default function ExpensiveProductsTable() {
         search: search || undefined,
     });
 
-    console.log("products:", data?.results.map(p => ({
-        id: p.id,
-        name: p.product_name,
-        dupes: p.dupe_products
-    })));
-
     const { mutate: deleteProduct, isPending: isDeleting } = useDeleteExpensiveProduct();
-
 
     const totalPages = data ? Math.ceil(data.count / PAGE_SIZE) : 1;
 
@@ -132,7 +127,6 @@ export default function ExpensiveProductsTable() {
                             onChange={(e) => handleSearchChange(e.target.value)}
                             className="bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm text-gray-600 placeholder-gray-400 w-64 focus:outline-none focus:ring-1 focus:ring-[#4a9e5c]"
                         />
-
                         <div className="flex items-center gap-3">
                             <button
                                 onClick={() => setUploadDupeBulkProductOpen(true)}
@@ -153,7 +147,6 @@ export default function ExpensiveProductsTable() {
                     <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
                         {/* Header */}
                         <div className="grid grid-cols-[1fr_1.5fr_2.5fr_1fr_2fr_1.5fr_1.5fr] px-6 py-4 border-b border-gray-100">
-
                             {["ID", "Brand", "Product", "Price", "Key Actives", "Dupes", "Actions"].map((h) => (
                                 <span key={h} className="text-sm font-semibold text-gray-700">{h}</span>
                             ))}
@@ -169,24 +162,21 @@ export default function ExpensiveProductsTable() {
                             <div className="px-6 py-10 text-center text-sm text-gray-400">No products found.</div>
                         ) : (
                             data?.results.map((product, idx) => (
-
                                 <div
                                     key={product.id}
-                                    className={`grid grid-cols-[1fr_1.5fr_2.5fr_1fr_2fr_1.5fr_1.5fr] px-6 py-1 items-center ${idx !== (data.results.length - 1) ? "border-b border-gray-100" : ""}`}>
-
+                                    className={`grid grid-cols-[1fr_1.5fr_2.5fr_1fr_2fr_1.5fr_1.5fr] px-6 py-1 items-center ${idx !== (data.results.length - 1) ? "border-b border-gray-100" : ""}`}
+                                >
                                     <span className="text-sm text-gray-600">{product.id}</span>
                                     <span className="text-sm text-gray-600">{product.brand}</span>
                                     <span className="text-sm text-gray-600">{product.product_name}</span>
                                     <span className="text-sm text-gray-600">{product.price}</span>
+
                                     {/* Key Actives */}
                                     <div className="px-6 py-4">
                                         {(() => {
                                             const ingredients =
                                                 typeof product.key_active_ingredients === "string"
-                                                    ? product.key_active_ingredients
-                                                        .split(",")
-                                                        .map((i) => i.trim())
-                                                        .filter(Boolean)
+                                                    ? product.key_active_ingredients.split(",").map((i) => i.trim()).filter(Boolean)
                                                     : Array.isArray(product.key_active_ingredients)
                                                         ? product.key_active_ingredients
                                                         : [];
@@ -195,19 +185,12 @@ export default function ExpensiveProductsTable() {
                                             const visible = isExpanded ? ingredients : ingredients.slice(0, 2);
 
                                             return (
-                                                <div
-                                                    className="flex flex-wrap gap-2 items-center"
-                                                    style={{ maxWidth: "260px" }}
-                                                >
+                                                <div className="flex flex-wrap gap-2 items-center" style={{ maxWidth: "260px" }}>
                                                     {visible.map((active, index) => (
-                                                        <span
-                                                            key={`${active}-${index}`}
-                                                            className="bg-[#74C69D] text-white text-xs px-3 py-1 rounded-full"
-                                                        >
+                                                        <span key={`${active}-${index}`} className="bg-[#74C69D] text-white text-xs px-3 py-1 rounded-full">
                                                             {active}
                                                         </span>
                                                     ))}
-
                                                     {ingredients.length > 2 && (
                                                         <button
                                                             onClick={() => toggleRow(product.id)}
@@ -226,11 +209,9 @@ export default function ExpensiveProductsTable() {
                                         <span className="bg-[#F0CE94] text-[#7A6000] text-xs px-3 py-1 rounded-full font-medium">
                                             {product?.dupe_products} dupes
                                         </span>
-                                        
+                                       
                                         <button
-                                            onClick={() => {
-                                                setSelectedDupeProduct(product);
-                                            }}
+                                            onClick={() => setViewDupeProduct(product)}
                                             className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
@@ -242,17 +223,9 @@ export default function ExpensiveProductsTable() {
 
                                     {/* Actions */}
                                     <div className="flex items-center gap-3">
-                                        {/* <button
-                                            onClick={() => setIsAddDupeOpen(true)}
-                                            className="h-9 min-w-21 rounded-lg border border-[#d8d6d1] bg-[#faf9f7] px-2.5 text-sm font-semibold leading-none text-[#6f7786] transition-colors hover:bg-[#f3f1ed] cursor-pointer"
-                                        >
-                                            +Dupe
-                                        </button> */}
+                                        {/* ✅ +Dupe button — opens AddDupeEntry */}
                                         <button
-                                            onClick={() => {
-                                                setSelectedDupeProduct(product);
-                                                setIsAddDupeOpen(true);
-                                            }}
+                                            onClick={() => setAddDupeProduct(product)}
                                             className="h-9 min-w-21 rounded-lg border border-[#d8d6d1] bg-[#faf9f7] px-2.5 text-sm font-semibold leading-none text-[#6f7786] transition-colors hover:bg-[#f3f1ed] cursor-pointer"
                                         >
                                             +Dupe
@@ -291,7 +264,7 @@ export default function ExpensiveProductsTable() {
                             disabled={currentPage === totalPages}
                             className="cursor-pointer w-10 h-10 flex items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 transition-colors text-sm disabled:opacity-40"
                         >›</button>
-                        <span className="text-sm text-gray-600 ml-2"> Total {data?.count ?? 0} products</span>
+                        <span className="text-sm text-gray-600 ml-2">Total {data?.count ?? 0} products</span>
                     </div>
                 </>
             ) : (
@@ -314,21 +287,20 @@ export default function ExpensiveProductsTable() {
                 />
             )}
 
-            {selectedDupeProduct && (
+            {/* ✅ eye button modal — view dupes */}
+            {viewDupeProduct && (
                 <DupeFoundsModal
-                    onClose={() => setSelectedDupeProduct(null)}
-                    productName={selectedDupeProduct.product_name}
-                    expensiveProductId={selectedDupeProduct.id}
+                    onClose={() => setViewDupeProduct(null)}
+                    productName={viewDupeProduct.product_name}
+                    expensiveProductId={viewDupeProduct.id}
                 />
             )}
 
-            {isAddDupeOpen && selectedDupeProduct && (
+            {/* ✅ +Dupe button modal — add new dupe */}
+            {addDupeProduct && (
                 <AddDupeEntry
-                    onClose={() => {
-                        setIsAddDupeOpen(false);
-                        setSelectedDupeProduct(null);
-                    }}
-                    expensiveProduct={selectedDupeProduct}
+                    onClose={() => setAddDupeProduct(null)}
+                    expensiveProduct={addDupeProduct}
                 />
             )}
         </div>

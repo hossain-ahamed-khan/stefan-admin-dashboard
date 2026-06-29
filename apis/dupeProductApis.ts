@@ -79,9 +79,24 @@ export const getDupeProduct = async (params : GetDupeProductsParams): Promise<Du
             expensive_product: params.expensive_product || undefined,
         },
     });
+    // console.log("Dupe product raw response:", data);
     return data;
 };
 
+// dashboard/dupe-products/expensive/{expensive_product_id}/
+export const getDupeProductsByExpensiveProduct = async (expensive_product_id: number, params : GetDupeProductsParams) => {
+    const { data } = await axiosApiInstance.get(`/dashboard/dupe-products/expensive/${expensive_product_id}/`,{
+        params: {
+            page: params.page,
+            page_size: params.page_size,
+            // ordering: params.ordering,
+            // search: params.search || undefined,
+        },
+    });
+    // console.log("Dupe product raw response:", data);
+    return data;
+};
+ 
 export const createDupeProduct = async (body: CreateDupeProducts): Promise<CreateDupeProductsResponse> => {
     const { data } = await axiosApiInstance.post("/dashboard/dupe-products/", body);
     return data; 
