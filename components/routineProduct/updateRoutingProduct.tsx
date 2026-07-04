@@ -10,6 +10,14 @@ interface Tag { id: number; label: string; }
 const SKIN_TYPES = ["Normal", "Oily", "Dry", "Combination", "Sensitive", "Acne-prone", "Dehydrated", "Mature", "Rosacea"];
 const SKIN_CONCERNS = ["Fine lines", "Wrinkles", "Pigmentation", "Dark spots", "Acne", "Redness", "Large pores", "Dryness", "Dullness", "Uneven texture", "Dark circles", "Scarring"];
 
+// The API can return these fields as either an array (current behavior)
+// or a comma-separated string (older/legacy responses). Normalize to string[].
+const toArray = (val: unknown): string[] => {
+  if (!val) return [];
+  if (Array.isArray(val)) return val.map((s) => String(s).trim()).filter(Boolean);
+  return String(val).split(",").map((s) => s.trim()).filter(Boolean);
+};
+
 interface Props {
   product: SkincareProduct;
   onClose: () => void;
@@ -25,17 +33,11 @@ export default function UpdateRoutineProduct({ product, onClose }: Props) {
   const [routineSlot, setRoutineSlot] = useState<"morning" | "night" | "both">(product.routine_slot);
   const [price, setPrice] = useState(product.price);
   const [priority, setPriority] = useState(product.priority_score);
-  const [skinTypes, setSkinTypes] = useState<string[]>(
-    product.suitable_skin_types ? product.suitable_skin_types.split(",").map((s) => s.trim()) : []
-  );
-  const [concerns, setConcerns] = useState<string[]>(
-    product.suitable_concerns ? product.suitable_concerns.split(",").map((s) => s.trim()) : []
-  );
+  const [skinTypes, setSkinTypes] = useState<string[]>(toArray(product.suitable_skin_types));
+  const [concerns, setConcerns] = useState<string[]>(toArray(product.suitable_concerns));
   const [whyItSuits, setWhyItSuits] = useState(product.why_it_suits_this_profile);
   const [ingredientTags, setIngredientTags] = useState<Tag[]>(
-    product.key_ingredients
-      ? product.key_ingredients.split(",").map((label, i) => ({ id: i, label: label.trim() }))
-      : []
+    toArray(product.key_ingredients).map((label, i) => ({ id: i, label }))
   );
   const [ingredientInput, setIngredientInput] = useState("");
   const [awinUrl, setAwinUrl] = useState(product.awin_tracking_URL);

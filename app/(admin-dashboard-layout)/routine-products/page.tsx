@@ -28,15 +28,7 @@ export default function RoutineProductsTable() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isUploadRoutingProductOpen, setUploadRoutingProductOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<SkincareProduct | null>(null);
-  const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
 
-  const toggleRow = (id: number) => {
-    setExpandedRows((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
-  };
 
   const { data, isLoading } = useGetRoutingProducts({
     page,
@@ -179,50 +171,24 @@ export default function RoutineProductsTable() {
                     </span>
                   </td>
                   <td className="py-4 px-6 text-center capitalize">{product.routine_slot}</td>
-                  <td className="py-4 px-6 text-center flex items-center justify-center gap-1">
-                    {/* {product.suitable_skin_types.split(",").map((st) => (
+                  <td className="py-4 px-6 text-center flex flex-wrap items-center justify-center gap-1">
+                    {(() => {
+                      const rawData = product.suitable_skin_types;
+                      if (!rawData) return null;
+
+                      // Safely parse whether it's already an array or a comma-separated string
+                      const typesArray = Array.isArray(rawData)
+                        ? rawData
+                        : String(rawData).split(",").map((s) => s.trim());
+
+                      return typesArray.filter(Boolean).map((st) => (
                         <span key={st} className="inline-block rounded-full px-3 py-1 text-xs font-medium bg-[#74C69D] text-white">
-                          {st.trim()}
+                          {st}
                         </span>
-                      ))} */}
-
-                    <div>
-                      {(() => {
-                        const ingredients = typeof product.suitable_skin_types === "string" ? product.suitable_skin_types
-                          .split(",")
-                          .map((i) => i.trim())
-                          .filter(Boolean)
-                          : Array.isArray(product.suitable_skin_types)
-                            ? product.suitable_skin_types
-                            : [];
-              
-                        const productId = product.product_id;
-                        const isExpanded = typeof productId === "number" && expandedRows.has(productId);
-                        const visible = isExpanded ? ingredients : ingredients.slice(0, 2);
-
-                        return (
-                          <div className="flex items-center justify-center gap-1 flex-wrap" style={{ maxWidth: "260px" }}>
-                            {visible.map((active) => (
-                              <span key={active} className="bg-[#74C69D] text-white text-xs px-3 py-1 rounded-full">
-                                {active}
-                              </span>
-                            ))}
-
-                            {ingredients.length > 2 && (
-                              <button
-                                onClick={() => {
-                                  if (typeof productId === "number") toggleRow(productId);
-                                }}
-                                className="text-gray-500 text-xs font-bold hover:text-gray-700 focus:outline-none cursor-pointer"
-                              >
-                                {isExpanded ? "Show less" : "More..."}
-                              </button>
-                            )}
-                          </div>
-                        );
-                      })()}
-                    </div>
+                      ));
+                    })()}
                   </td>
+
                   <td className="py-4 px-6 text-center">{product.price}</td>
                   <td className="py-4 px-6 text-center">{product.priority_score}</td>
                   <td className="py-4 px-6 text-center">
