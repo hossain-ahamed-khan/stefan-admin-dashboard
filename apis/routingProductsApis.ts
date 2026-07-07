@@ -1,19 +1,19 @@
 import axiosApiInstance from "./apiAxiosInstance";
 
+
 export interface SkincareProduct {
   product_id?: number;
   brand: string;
   product_name: string;
   category: number;
   category_name?: string;
-  // morning | night | both
   routine_slot: "morning" | "night" | "both";
   price: string;
   priority_score: number;
-  suitable_skin_types: string;
-  suitable_concerns: string;
+  suitable_skin_types: string[];  
+  suitable_concerns: string[];    
   why_it_suits_this_profile: string;
-  key_ingredients: string;
+  key_ingredients: string[];   
   awin_tracking_URL: string;
   is_active?: boolean;
   created_at?: string;
@@ -41,10 +41,10 @@ export interface CreateRoutingProductPayload {
   routine_slot: "morning" | "night" | "both";
   price: string;
   priority_score: number;
-  suitable_skin_types: string;
-  suitable_concerns: string;
+  suitable_skin_types: string[]; 
+  suitable_concerns: string[];  
   why_it_suits_this_profile: string;
-  key_ingredients: string;
+  key_ingredients: string[];  
   awin_tracking_URL: string;
 }
 

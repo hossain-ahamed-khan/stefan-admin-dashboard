@@ -65,10 +65,10 @@ export default function AddRoutineProduct({ onClose }: AddRoutineProductProps) {
         routine_slot: routineSlot,
         price,
         priority_score: priority,
-        suitable_skin_types: skinTypes.join(", "),
-        suitable_concerns: concerns.join(", "),
+        suitable_skin_types: skinTypes,                          
+        suitable_concerns: concerns,                             
         why_it_suits_this_profile: whyItSuits,
-        key_ingredients: ingredientTags.map((t) => t.label).join(", "),
+        key_ingredients: ingredientTags.map((t) => t.label),  
         awin_tracking_URL: awinUrl,
       },
       {
@@ -82,7 +82,8 @@ export default function AddRoutineProduct({ onClose }: AddRoutineProductProps) {
           });
           onClose();
         },
-        onError: () => {
+        onError: (error: any) => {
+          // console.log("error:", error?.response?.data);
           Swal.fire({
             title: "Failed!",
             text: "Something went wrong. Please try again.",

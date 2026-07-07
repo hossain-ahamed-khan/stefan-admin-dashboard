@@ -33,12 +33,26 @@ export default function UpdateRoutineProduct({ product, onClose }: Props) {
   const [routineSlot, setRoutineSlot] = useState<"morning" | "night" | "both">(product.routine_slot);
   const [price, setPrice] = useState(product.price);
   const [priority, setPriority] = useState(product.priority_score);
-  const [skinTypes, setSkinTypes] = useState<string[]>(toArray(product.suitable_skin_types));
-  const [concerns, setConcerns] = useState<string[]>(toArray(product.suitable_concerns));
   const [whyItSuits, setWhyItSuits] = useState(product.why_it_suits_this_profile);
-  const [ingredientTags, setIngredientTags] = useState<Tag[]>(
-    toArray(product.key_ingredients).map((label, i) => ({ id: i, label }))
-  );
+ 
+
+  const [skinTypes, setSkinTypes] = useState<string[]>(
+  Array.isArray(product.suitable_skin_types)
+    ? product.suitable_skin_types
+    : product.suitable_skin_types?.split(",").map((s:any) => s.trim()) ?? []
+);
+
+const [concerns, setConcerns] = useState<string[]>(
+  Array.isArray(product.suitable_concerns)
+    ? product.suitable_concerns
+    : product.suitable_concerns?.split(",").map((s:any) => s.trim()) ?? []
+);
+
+const [ingredientTags, setIngredientTags] = useState<Tag[]>(
+  Array.isArray(product.key_ingredients)
+    ? product.key_ingredients.map((label, i) => ({ id: i, label }))
+    : product.key_ingredients?.split(",").map(({label, i}: {label: string, i: number}) => ({ id: i, label: label.trim() })) ?? []
+);
   const [ingredientInput, setIngredientInput] = useState("");
   const [awinUrl, setAwinUrl] = useState(product.awin_tracking_URL);
 
@@ -81,10 +95,10 @@ export default function UpdateRoutineProduct({ product, onClose }: Props) {
           routine_slot: routineSlot,
           price,
           priority_score: priority,
-          suitable_skin_types: skinTypes.join(", "),
-          suitable_concerns: concerns.join(", "),
+          suitable_skin_types: skinTypes,
+          suitable_concerns: concerns,
           why_it_suits_this_profile: whyItSuits,
-          key_ingredients: ingredientTags.map((t) => t.label).join(", "),
+          key_ingredients: ingredientTags.map((t) => t.label),
           awin_tracking_URL: awinUrl,
         },
       },
@@ -99,7 +113,9 @@ export default function UpdateRoutineProduct({ product, onClose }: Props) {
           });
           onClose();
         },
-        onError: () => {
+        onError: (error: any) => {
+          console.log("error:", error?.response?.data);
+
           Swal.fire({
             title: "Failed!",
             text: "Something went wrong. Please try again.",

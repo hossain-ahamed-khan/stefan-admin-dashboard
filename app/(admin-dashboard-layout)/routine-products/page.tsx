@@ -140,7 +140,7 @@ export default function RoutineProductsTable() {
         <table className="w-full text-sm text-stone-700">
           <thead>
             <tr className="border-b border-stone-100">
-              {["ID", "Product", "Category", "Slot", "Skin Types", "Price", "Priority", "Verified", "Actions"].map((col) => (
+              {["ID","Brand", "Product", "Category", "Slot", "Skin Types", "Price", "Priority", "Verified", "Actions"].map((col) => (
                 <th key={col} className="py-4 px-6 text-center font-semibold text-stone-800">{col}</th>
               ))}
             </tr>
