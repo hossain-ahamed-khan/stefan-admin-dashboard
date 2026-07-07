@@ -10,10 +10,10 @@ export interface SkincareProduct {
   routine_slot: "morning" | "night" | "both";
   price: string;
   priority_score: number;
-  suitable_skin_types: string[];  
-  suitable_concerns: string[];    
+  suitable_skin_types: string[] | string;  
+  suitable_concerns: string[] | string;    
   why_it_suits_this_profile: string;
-  key_ingredients: string[];   
+  key_ingredients: string[] | string;   
   awin_tracking_URL: string;
   is_active?: boolean;
   created_at?: string;

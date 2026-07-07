@@ -34,25 +34,24 @@ export default function UpdateRoutineProduct({ product, onClose }: Props) {
   const [price, setPrice] = useState(product.price);
   const [priority, setPriority] = useState(product.priority_score);
   const [whyItSuits, setWhyItSuits] = useState(product.why_it_suits_this_profile);
- 
 
-  const [skinTypes, setSkinTypes] = useState<string[]>(
-  Array.isArray(product.suitable_skin_types)
-    ? product.suitable_skin_types
-    : product.suitable_skin_types?.split(",").map((s:any) => s.trim()) ?? []
-);
 
-const [concerns, setConcerns] = useState<string[]>(
-  Array.isArray(product.suitable_concerns)
-    ? product.suitable_concerns
-    : product.suitable_concerns?.split(",").map((s:any) => s.trim()) ?? []
-);
+  const toStringArray = (val: string[] | string | undefined): string[] => {
+    if (!val) return [];
+    if (Array.isArray(val)) return val;
+    return val.split(",").map((s) => s.trim()).filter(Boolean);
+  };
 
-const [ingredientTags, setIngredientTags] = useState<Tag[]>(
-  Array.isArray(product.key_ingredients)
-    ? product.key_ingredients.map((label, i) => ({ id: i, label }))
-    : product.key_ingredients?.split(",").map(({label, i}: {label: string, i: number}) => ({ id: i, label: label.trim() })) ?? []
-);
+  const toTags = (val: string[] | string | undefined): Tag[] => {
+    return toStringArray(val).map((label, i) => ({ id: i, label }));
+  };
+
+  // then use them
+  const [skinTypes, setSkinTypes] = useState<string[]>(toStringArray(product.suitable_skin_types));
+  const [concerns, setConcerns] = useState<string[]>(toStringArray(product.suitable_concerns));
+  const [ingredientTags, setIngredientTags] = useState<Tag[]>(toTags(product.key_ingredients));
+
+
   const [ingredientInput, setIngredientInput] = useState("");
   const [awinUrl, setAwinUrl] = useState(product.awin_tracking_URL);
 
@@ -114,7 +113,7 @@ const [ingredientTags, setIngredientTags] = useState<Tag[]>(
           onClose();
         },
         onError: (error: any) => {
-          console.log("error:", error?.response?.data);
+          console.log("error from updateProduct:", error?.response?.data);
 
           Swal.fire({
             title: "Failed!",
