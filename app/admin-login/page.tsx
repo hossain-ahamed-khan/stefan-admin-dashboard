@@ -37,7 +37,8 @@ export default function AdminDashboardLogin() {
                 return;
             }
 
-            localStorage.setItem("authToken", response?.access);
+            localStorage.setItem("authToken", response.access);
+            localStorage.setItem("refreshToken", response.refresh);
 
             await Swal.fire({
                 icon: "success",

@@ -16,4 +16,23 @@ axiosApiInstance.interceptors.request.use((config) => {
   return config;
 });
 
+// Response Interceptor
+axiosApiInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      // Token expired or invalid
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("refreshToken");
+
+      // Prevent redirect loop
+      if (window.location.pathname !== "/admin-login") {
+        window.location.href = "/admin-login";
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 export default axiosApiInstance;
