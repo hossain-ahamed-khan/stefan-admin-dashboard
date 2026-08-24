@@ -268,7 +268,7 @@ export default function ExpensiveProductsTable() {
                     </div>
                 </>
             ) : (
-                <DupeEntriesTable />
+                <DupeEntriesTable expensiveProducts={data?.results ?? []} />
             )}
 
             {/* Modals */}

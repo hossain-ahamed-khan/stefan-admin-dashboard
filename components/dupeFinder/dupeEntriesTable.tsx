@@ -3,7 +3,7 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import UpdateDupeEntry from "./updateDupeModal";
 import { useGetDupeProducts, useDeleteDupeProduct } from "@/apis/hooks/useDupeProducts";
-import { DupeProduct } from "@/apis/dupeProductApis";
+import { DupeProduct, ExpensiveProduct } from "@/apis/dupeProductApis";
 
 const PAGE_SIZE = 30;
 
@@ -19,11 +19,17 @@ const TrashIcon = () => (
   </svg>
 );
 
-export default function DupeEntriesTable() {
+interface DupeEntriesTableProps {
+  expensiveProducts: ExpensiveProduct[];
+}
+
+export default function DupeEntriesTable({ expensiveProducts }: DupeEntriesTableProps) {
+
   const [search, setSearch] = useState("");
   const [verifiedFilter, setVerifiedFilter] = useState("All verified");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedEntry, setSelectedEntry] = useState<DupeProduct | null>(null);
+
 
   const { data, isLoading } = useGetDupeProducts({
     page: currentPage,
@@ -91,6 +97,7 @@ export default function DupeEntriesTable() {
 
   return (
     <div className="min-h-screen bg-[#faf8f5] font-sans">
+      <h1>hello</h1>
       {/* Search + Filter */}
       <div className="mb-5 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
@@ -120,8 +127,8 @@ export default function DupeEntriesTable() {
       {/* Table */}
       <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
         {/* Header */}
-        <div className="grid grid-cols-[1.5fr_2fr_1fr_1.5fr_1.5fr_1.5fr_1.5fr_1fr] px-6 py-4 border-b border-gray-100">
-          {["Dupe Brand", "Dupe Product", "Price", "Saving", "Retailer", "Added by", "Verified", "Actions"].map((h) => (
+        <div className="grid grid-cols-[1.5fr_2fr_2fr_1fr_1.5fr_1.5fr_1fr_1fr_1.5fr] px-4 py-4 border-b border-gray-100">
+          {["Dupe Brand", "Expensive Product", "Dupe Product", "Price", "Saving", "Retailer", "Added by", "Verified", "Actions"].map((h) => (
             <span key={h} className="text-sm font-semibold text-gray-700">{h}</span>
           ))}
         </div>
@@ -135,43 +142,87 @@ export default function DupeEntriesTable() {
         ) : filtered.length === 0 ? (
           <div className="px-6 py-10 text-center text-sm text-gray-400">No entries found.</div>
         ) : (
-          filtered.map((entry, idx) => (
-            <div
-              key={entry.id}
-              className={`grid grid-cols-[1.5fr_2fr_1fr_1.5fr_1.5fr_1.5fr_1.5fr_1fr] px-6 py-4 items-center ${idx !== filtered.length - 1 ? "border-b border-gray-100" : ""}`}
-            >
-              <span className="text-sm text-gray-600">{entry.brand}</span>
-              <span className="text-sm text-gray-600">{entry.product_name}</span>
-              <span className="text-sm text-gray-600">{entry.price}</span>
-              <div>
-                <span className="bg-[#CDBDFF] text-[#6b21a8] text-xs px-3 py-1 rounded-full">
-                  {entry.saving_percent}% off
+          filtered.map((entry, idx) => {
+            const expensiveProduct = expensiveProducts.find(
+              (product) => product.id === entry.expensive_product.id
+            );
+
+            return (
+              <div
+                key={entry.id}
+                className={`grid grid-cols-[1.5fr_2fr_2fr_1fr_1.5fr_1.5fr_1fr_1fr_1.5fr] px-4 py-4 items-center ${idx !== filtered.length - 1 ? "border-b border-gray-100" : ""
+                  }`}
+              >
+                {/* Dupe Brand */}
+                <span className="text-sm text-gray-600">
+                  {entry.brand}
                 </span>
+
+                {/* Expensive Product */}
+                <span className="text-sm text-gray-600">
+                  {entry.expensive_product.product_name}
+                </span>
+
+                {/* Dupe Product */}
+                <span className="text-sm text-gray-600">
+                  {entry.product_name}
+                </span>
+
+                {/* Price */}
+                <span className="text-sm text-gray-600">
+                  {entry.price}
+                </span>
+
+                {/* Saving */}
+                <div>
+                  <span className="bg-[#CDBDFF] text-[#6b21a8] text-xs px-3 py-1 rounded-full">
+                    {entry.saving_percent}% off
+                  </span>
+                </div>
+
+                {/* Retailer */}
+                <span className="text-sm text-gray-600">
+                  {entry.retailer}
+                </span>
+
+                {/* Added by */}
+                <span className="text-sm text-gray-600">
+                  {entry.created_by}
+                </span>
+
+                {/* Verified */}
+                <div>
+                  {entry.make_verified ? (
+                    <span className="bg-[#74C69D] text-white text-xs px-3 py-1 rounded-full font-medium">
+                      Verified
+                    </span>
+                  ) : (
+                    <span className="bg-[#F0CE94] text-[#7a6000] text-xs px-3 py-1 rounded-full font-medium">
+                      Pending
+                    </span>
+                  )}
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => setSelectedEntry(entry)}
+                    className="flex cursor-pointer w-10 h-10 items-center justify-center rounded-md border border-[#e2dfd8] bg-[#f9f9f7] text-[#7e8794] transition-colors hover:bg-white hover:text-[#667180]"
+                  >
+                    <EditIcon />
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(entry.id)}
+                    disabled={isDeleting}
+                    className="flex cursor-pointer w-10 h-10 items-center justify-center rounded-md border border-[#e2dfd8] bg-[#f9f9f7] text-[#7e8794] transition-colors hover:bg-red-50 hover:text-red-400 hover:border-red-200 disabled:opacity-40"
+                  >
+                    <TrashIcon />
+                  </button>
+                </div>
               </div>
-              <span className="text-sm text-gray-600">{entry.retailer}</span>
-              <span className="text-sm text-gray-600">{entry.created_by}</span>
-              <div>
-                {entry.make_verified ? (
-                  <span className="bg-[#74C69D] text-white text-xs px-3 py-1 rounded-full font-medium">Verified</span>
-                ) : (
-                  <span className="bg-[#F0CE94] text-[#7a6000] text-xs px-3 py-1 rounded-full font-medium">Pending</span>
-                )}
-              </div>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => setSelectedEntry(entry)}
-                  className="flex cursor-pointer w-10 h-10 items-center justify-center rounded-md border border-[#e2dfd8] bg-[#f9f9f7] text-[#7e8794] transition-colors hover:bg-white hover:text-[#667180]">
-                  <EditIcon />
-                </button>
-                <button
-                  onClick={() => handleDelete(entry.id)}
-                  disabled={isDeleting}
-                  className="flex cursor-pointer w-10 h-10 items-center justify-center rounded-md border border-[#e2dfd8] bg-[#f9f9f7] text-[#7e8794] transition-colors hover:bg-red-50 hover:text-red-400 hover:border-red-200 disabled:opacity-40">
-                  <TrashIcon />
-                </button>
-              </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
 
