@@ -97,7 +97,6 @@ export default function DupeEntriesTable({ expensiveProducts }: DupeEntriesTable
 
   return (
     <div className="min-h-screen bg-[#faf8f5] font-sans">
-      <h1>hello</h1>
       {/* Search + Filter */}
       <div className="mb-5 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">

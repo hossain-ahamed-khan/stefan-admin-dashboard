@@ -206,8 +206,15 @@ export default function ExpensiveProductsTable() {
 
                                     {/* Dupes */}
                                     <div className="flex items-center gap-2">
-                                        <span className="bg-[#F0CE94] text-[#7A6000] text-xs px-3 py-1 rounded-full font-medium">
+                                        {/* <span className="bg-[#F0CE94] text-[#7A6000] text-xs px-3 py-1 rounded-full font-medium">
                                             {product?.dupe_products} dupes
+                                        </span> */}
+                                        <span className="bg-[#F0CE94] text-[#7A6000] text-xs px-3 py-1 rounded-full font-medium">
+                                            {(Array.isArray(product?.dupe_products)
+                                                ? product.dupe_products.length
+                                                : typeof product?.dupe_products === "number"
+                                                    ? product.dupe_products
+                                                    : 0)} dupes
                                         </span>
                                        
                                         <button
